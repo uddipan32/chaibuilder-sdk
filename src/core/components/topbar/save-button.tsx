@@ -27,7 +27,7 @@ export const SaveButton = () => {
       )}
       size="sm"
       variant="outline">
-      <CheckIcon className={"text-sm text-white h-4 w-4"} />
+      <CheckIcon className={"h-4 w-4 text-sm text-white"} />
       <span className={"text-sm"}>
         {saveState === "SAVING" ? t("Saving") : saveState === "SAVED" ? t("Saved") : t("Unsaved")}
       </span>
