@@ -35,7 +35,7 @@ import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-const CANNOT_COPY_BLOCKS = window != undefined ? !navigator.clipboard : true;
+const CANNOT_COPY_BLOCKS = typeof window !== "undefined" ? !navigator.clipboard : true;
 
 const CopyPasteBlocks = () => {
   const [blocks] = useBlocksStore();

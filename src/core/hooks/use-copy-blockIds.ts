@@ -76,7 +76,7 @@ export const useCopyBlocks = (): [
             return result;
           }),
         };
-        if (window != undefined) {
+        if (typeof window !== "undefined") {
           if (!navigator.clipboard) {
             toast.error("Clipboard not available.");
             return;
