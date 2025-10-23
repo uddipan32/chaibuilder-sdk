@@ -62,6 +62,8 @@ export const useSavePage = () => {
       console.log("3 save")
       if (!hasPermission("save_page") || !isPageLoaded) {
         console.log("4 No permission to save");
+        console.log("has permission", !hasPermission("save_page"))
+        console.log("is page loaded", !isPageLoaded)
         return;
       }
       setSaveState("SAVING");
