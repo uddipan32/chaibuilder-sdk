@@ -1,5 +1,5 @@
 import { ChaiBlock } from "@chaibuilder/runtime";
-import { isObject } from "@rjsf/utils";
+import { isObject } from "lodash-es";
 import { atom, useAtom, useSetAtom } from "jotai";
 import { get, isFunction, pick, startsWith, values } from "lodash-es";
 import { useEffect, useState } from "react";
