@@ -114,7 +114,7 @@ const BlockCard = ({
           )}>
           {isAdding && (
             <div className="absolute flex h-full w-full items-center justify-center bg-black/70">
-              <ReloadIcon className="animate-spin h-4 w-4 text-white" />
+              <ReloadIcon className="h-4 w-4 animate-spin text-white" />
               <span className="pl-2 text-sm text-white">Adding...</span>
             </div>
           )}
