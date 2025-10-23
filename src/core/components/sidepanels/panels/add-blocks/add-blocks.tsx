@@ -261,7 +261,7 @@ const AddBlocksPanel = ({
 
   // If current tab is "library" but there are no UI libraries, switch to "core" tab
   useEffect(() => {
-    if (tab === "library" && !hasUiLibraries) {
+    if (tab === "library") {
       setTab("core");
     }
   }, [tab, hasUiLibraries, setTab]);
