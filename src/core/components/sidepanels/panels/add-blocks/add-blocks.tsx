@@ -260,11 +260,11 @@ const AddBlocksPanel = ({
   const hasUiLibraries = uiLibraries.length > 0;
 
   // If current tab is "library" but there are no UI libraries, switch to "core" tab
-  useEffect(() => {
-    if (tab === "library") {
-      setTab("core");
-    }
-  }, [tab, hasUiLibraries, setTab]);
+  // useEffect(() => {
+  //   if (tab === "library" && !hasUiLibraries) {
+  //     setTab("core");
+  //   }
+  // }, [tab, hasUiLibraries, setTab]);
 
   return (
     <div className={mergeClasses("flex h-full w-full flex-col overflow-hidden", className)}>
