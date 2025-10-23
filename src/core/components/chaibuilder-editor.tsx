@@ -1,3 +1,4 @@
+import Topbar from "@/_demo/top-bar";
 import { chaiBuilderPropsAtom, chaiPageExternalDataAtom } from "@/core/atoms/builder";
 import { builderStore } from "@/core/atoms/store";
 import { selectedLibraryAtom } from "@/core/atoms/ui";
@@ -131,6 +132,7 @@ const ChaiBuilderEditor: React.FC<ChaiBuilderEditorProps> = (props: ChaiBuilderE
   return (
     <div className="h-screen w-screen">
       <ErrorBoundary fallback={<FallbackError />} onError={onErrorFn}>
+        <Topbar />
         <ScreenTooSmall />
         <ChaiBuilderComponent {...props} />
         <ChaiWatchers {...props} />

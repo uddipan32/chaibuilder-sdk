@@ -58,7 +58,6 @@ export const useSavePage = () => {
 
   const savePage = useThrottledCallback(
     async (autoSave: boolean = false) => {
-      console.log("Save PAGE")
       if (!hasPermission("save_page") || !isPageLoaded) {
         return;
       }

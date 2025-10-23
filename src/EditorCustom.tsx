@@ -8,6 +8,8 @@ loadWebBlocks();
 
 function ChaiBuilderCustom() {
   const [blocks] = useAtom(lsBlocksAtom);
+  console.log("EDITOR 2");
+
   return (
     <ChaiBuilderEditor
       locale={"pt-BR"}

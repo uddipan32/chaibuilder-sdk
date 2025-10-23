@@ -28,6 +28,7 @@ registerChaiSidebarPanel("popover", {
 function ChaiBuilderDefault() {
   const [blocks] = useAtom(lsBlocksAtom);
   const [theme, setTheme] = useAtom(lsThemeAtom);
+  console.log("EDITOR 1");
   return (
     <ChaiBuilderEditor
       _tempProps={{
