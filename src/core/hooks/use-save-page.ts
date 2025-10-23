@@ -57,7 +57,9 @@ export const useSavePage = () => {
   };
 
   const savePage = useThrottledCallback(
+
     async (autoSave: boolean = false) => {
+      console.log("3 save")
       if (!hasPermission("save_page") || !isPageLoaded) {
         return;
       }
@@ -82,6 +84,7 @@ export const useSavePage = () => {
   );
 
   const savePageAsync = async () => {
+    console.log("4 save async")
     if (!hasPermission("save_page") || !isPageLoaded) {
       return;
     }
