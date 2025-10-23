@@ -51,7 +51,7 @@ export const usePasteBlocks = (): {
         return canPasteBlocks(cutBlockIds, newParentId);
       }
       try {
-        if (window)
+        if (window != undefined)
         {
         const clipboardContent = await navigator.clipboard.readText();
         if (clipboardContent) {
@@ -74,7 +74,7 @@ export const usePasteBlocks = (): {
         const parentId = Array.isArray(newParentId) ? newParentId[0] : newParentId;
 
         // Check for paste permissions before proceeding
-        if (window) 
+        if (window != undefined) 
         {
 
         if ( !navigator?.permissions) {

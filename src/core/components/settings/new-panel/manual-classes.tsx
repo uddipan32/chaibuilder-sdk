@@ -115,7 +115,7 @@ export function ManualClasses() {
   };
 
   const onClickCopy = () => {
-    if (window) {
+    if (window != undefined) {
       if (navigator.clipboard === undefined) {
         toast.error(t("Clipboard not supported"));
         return;
