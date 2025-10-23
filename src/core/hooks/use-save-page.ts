@@ -61,11 +61,14 @@ export const useSavePage = () => {
     async (autoSave: boolean = false) => {
       console.log("3 save")
       if (!hasPermission("save_page") || !isPageLoaded) {
+        console.log("4 No permission to save");
         return;
       }
       setSaveState("SAVING");
       onSaveStateChange("SAVING");
       const pageData = getPageData();
+
+      console.log("5")
 
       await onSave({
         autoSave,
@@ -77,6 +80,7 @@ export const useSavePage = () => {
         setSaveState("SAVED");
         onSaveStateChange("SAVED");
       }, 100);
+      console.log("6")
       return true;
     },
     [getPageData, setSaveState, theme, onSave, onSaveStateChange, isPageLoaded],
