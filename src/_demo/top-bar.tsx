@@ -1,22 +1,22 @@
-import { LanguageButton } from "@/_demo/lang-button";
+// import { LanguageButton } from "@/_demo/lang-button";
 import RightTop from "@/_demo/right-top";
 // import { Alert, AlertDescription } from "@/ui/shadcn/components/ui/alert";
 // import { InfoCircledIcon } from "@radix-ui/react-icons";
 
-const Logo = () => {
-  return (
-    <div className="flex w-96 items-center gap-2">
-      <a href="https://chaibuilder.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-        <img src="/chaibuilder-logo.png" alt="Chai Builder" width={32} height={32} className="rounded-md" />
-        <span className="text-2xl font-bold tracking-tight">Chai Builder</span>
-      </a>
+// const Logo = () => {
+//   return (
+//     <div className="flex w-96 items-center gap-2">
+//       <a href="https://chaibuilder.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+//         <img src="/chaibuilder-logo.png" alt="Chai Builder" width={32} height={32} className="rounded-md" />
+//         <span className="text-2xl font-bold tracking-tight">Chai Builder</span>
+//       </a>
 
-      <a href="https://github.com/chaibuilder/sdk" target="_blank" rel="noopener noreferrer">
-        <img src="https://img.shields.io/github/stars/chaibuilder/sdk" alt="Chai Builder" className="rounded-md" />
-      </a>
-    </div>
-  );
-};
+//       <a href="https://github.com/chaibuilder/sdk" target="_blank" rel="noopener noreferrer">
+//         <img src="https://img.shields.io/github/stars/chaibuilder/sdk" alt="Chai Builder" className="rounded-md" />
+//       </a>
+//     </div>
+//   );
+// };
 
 // const DemoAlert = () => {
 //   return (
@@ -33,10 +33,9 @@ const Logo = () => {
 export default function Topbar() {
   return (
     <div className="flex w-full items-center justify-between px-2">
-      <Logo />
       <span>{/* <DemoAlert /> */}</span>
       <div className="flex items-center gap-2">
-        <LanguageButton />
+        {/* <LanguageButton /> */}
         <RightTop />
       </div>
     </div>

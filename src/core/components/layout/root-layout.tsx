@@ -208,6 +208,8 @@ const RootLayout: ComponentType = () => {
               <TopBar />
             </Suspense>
           </div>
+          <Topbar />
+
           <main className="relative flex h-[calc(100vh-56px)] max-w-full flex-1 flex-row">
             <div id="sidebar" className="flex w-12 flex-col items-center justify-between border-r border-border py-2">
               <div className="flex flex-col gap-y-1">
@@ -248,6 +250,7 @@ const RootLayout: ComponentType = () => {
                 })}
               </div>
             </div>
+
             {/* Side Panel */}
             <motion.div
               id="left-panel"
@@ -270,7 +273,6 @@ const RootLayout: ComponentType = () => {
               )}
             </motion.div>
             <div id="canvas-container" className="flex h-full max-h-full flex-1 flex-col bg-slate-800/20">
-              <Topbar />
               <CanvasTopBar />
               <Suspense>
                 <CanvasArea />
