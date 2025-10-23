@@ -8,7 +8,6 @@ import { Separator } from "@/ui/shadcn/components/ui/separator";
 import { ZoomInIcon } from "@radix-ui/react-icons";
 import { round } from "lodash-es";
 import React from "react";
-import { SaveButton } from "../../topbar/save-button";
 
 const CanvasTopBar: React.FC = () => {
   const darkModeSupport = useBuilderProp("darkMode", true);
@@ -37,7 +36,6 @@ const CanvasTopBar: React.FC = () => {
       <div className="flex h-full items-center space-x-2">
         <ClearCanvas />
       </div>
-      <SaveButton />
     </div>
   );
 };

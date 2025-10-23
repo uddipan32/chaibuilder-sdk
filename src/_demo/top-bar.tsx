@@ -1,7 +1,7 @@
 import { LanguageButton } from "@/_demo/lang-button";
 import RightTop from "@/_demo/right-top";
-import { Alert, AlertDescription } from "@/ui/shadcn/components/ui/alert";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
+// import { Alert, AlertDescription } from "@/ui/shadcn/components/ui/alert";
+// import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 const Logo = () => {
   return (
@@ -18,25 +18,23 @@ const Logo = () => {
   );
 };
 
-const DemoAlert = () => {
-  return (
-    <Alert variant="default" className="border-b border-border px-4 py-2">
-      <AlertDescription className="flex items-center gap-2">
-        <InfoCircledIcon className="h-4 w-4" />
-        <span className="font-bold">Demo mode</span> - Changes are saved in your browser local storage. AI actions are
-        mocked.
-      </AlertDescription>
-    </Alert>
-  );
-};
+// const DemoAlert = () => {
+//   return (
+//     <Alert variant="default" className="border-b border-border px-4 py-2">
+//       <AlertDescription className="flex items-center gap-2">
+//         <InfoCircledIcon className="h-4 w-4" />
+//         <span className="font-bold">Demo mode</span> - Changes are saved in your browser local storage. AI actions are
+//         mocked.
+//       </AlertDescription>
+//     </Alert>
+//   );
+// };
 
 export default function Topbar() {
   return (
     <div className="flex w-full items-center justify-between px-2">
       <Logo />
-      <span>
-        <DemoAlert />
-      </span>
+      <span>{/* <DemoAlert /> */}</span>
       <div className="flex items-center gap-2">
         <LanguageButton />
         <RightTop />

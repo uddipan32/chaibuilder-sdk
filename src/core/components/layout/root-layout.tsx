@@ -33,6 +33,7 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { AiIcon } from "../ai/ai-icon";
+import Topbar from "@/_demo/top-bar";
 
 const DEFAULT_PANEL_WIDTH = 280;
 
@@ -269,6 +270,7 @@ const RootLayout: ComponentType = () => {
               )}
             </motion.div>
             <div id="canvas-container" className="flex h-full max-h-full flex-1 flex-col bg-slate-800/20">
+              <Topbar />
               <CanvasTopBar />
               <Suspense>
                 <CanvasArea />
