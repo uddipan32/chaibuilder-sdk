@@ -28,7 +28,6 @@ import { each, noop, omit } from "lodash-es";
 import React, { useEffect, useMemo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Toaster } from "sonner";
-import { SaveButton } from "./topbar/save-button";
 
 const useAutoSave = () => {
   const { savePage, saveState } = useSavePage();
@@ -132,8 +131,6 @@ const ChaiBuilderEditor: React.FC<ChaiBuilderEditorProps> = (props: ChaiBuilderE
   return (
     <div className="h-screen w-screen">
       <ErrorBoundary fallback={<FallbackError />} onError={onErrorFn}>
-        <SaveButton />
-
         <ScreenTooSmall />
         <ChaiBuilderComponent {...props} />
         <ChaiWatchers {...props} />
