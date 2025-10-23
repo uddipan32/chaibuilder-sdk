@@ -37,6 +37,7 @@ export const checkMissingTranslations = (blocks: any[], lang: string): boolean =
 };
 
 export const useSavePage = () => {
+  console.log("1")
   const [saveState, setSaveState] = useAtom(builderSaveStateAtom);
   const onSave = useBuilderProp("onSave", async (_args) => {});
   const onSaveStateChange = useBuilderProp("onSaveStateChange", noop);
@@ -45,6 +46,8 @@ export const useSavePage = () => {
   const { hasPermission } = usePermissions();
   const { selectedLang, fallbackLang } = useLanguages();
   const [isPageLoaded] = useIsPageLoaded();
+
+  console.log("2")
 
   const needTranslations = () => {
     const pageData = getPageData();
@@ -55,6 +58,7 @@ export const useSavePage = () => {
 
   const savePage = useThrottledCallback(
     async (autoSave: boolean = false) => {
+      console.log("Save PAGE")
       if (!hasPermission("save_page") || !isPageLoaded) {
         return;
       }
