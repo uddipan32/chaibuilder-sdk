@@ -51,11 +51,14 @@ export const usePasteBlocks = (): {
         return canPasteBlocks(cutBlockIds, newParentId);
       }
       try {
+        if (window)
+        {
         const clipboardContent = await navigator.clipboard.readText();
         if (clipboardContent) {
           const clipboardData = JSON.parse(clipboardContent);
           return has(clipboardData, "_chai_copied_blocks");
         }
+      }
       } catch (error) {
         return false;
       }
@@ -71,10 +74,14 @@ export const usePasteBlocks = (): {
         const parentId = Array.isArray(newParentId) ? newParentId[0] : newParentId;
 
         // Check for paste permissions before proceeding
-        if (!navigator?.permissions) {
+        if (window) 
+        {
+
+        if ( !navigator?.permissions) {
           toast.error("Cannot check clipboard permissions.");
           return;
         }
+
         try {
           const permissionStatus = await navigator.permissions.query({ name: "clipboard-read" as PermissionName });
           if (permissionStatus.state === "denied") {
@@ -85,6 +92,7 @@ export const usePasteBlocks = (): {
           toast.error("Failed to check clipboard permissions. Please allow clipboard access.");
           return;
         }
+
 
         if (!isEmpty(cutBlockIds)) {
           moveCutBlocks(cutBlockIds, newParentId);
@@ -114,6 +122,7 @@ export const usePasteBlocks = (): {
             },
           },
         );
+      }
       },
       [cutBlockIds, moveCutBlocks, setCutBlockIds],
     ),

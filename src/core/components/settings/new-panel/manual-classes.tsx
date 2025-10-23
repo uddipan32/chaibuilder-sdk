@@ -115,12 +115,14 @@ export function ManualClasses() {
   };
 
   const onClickCopy = () => {
-    if (navigator.clipboard === undefined) {
-      toast.error(t("Clipboard not supported"));
-      return;
+    if (window) {
+      if (navigator.clipboard === undefined) {
+        toast.error(t("Clipboard not supported"));
+        return;
+      }
+      navigator.clipboard.writeText(classes.join(" "));
+      toast.success(t("Classes copied to clipboard"));
     }
-    navigator.clipboard.writeText(classes.join(" "));
-    toast.success(t("Classes copied to clipboard"));
   };
 
   return (

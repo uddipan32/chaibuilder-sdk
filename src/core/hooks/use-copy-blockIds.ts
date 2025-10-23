@@ -76,14 +76,16 @@ export const useCopyBlocks = (): [
             return result;
           }),
         };
-        if (!navigator.clipboard) {
-          toast.error("Clipboard not available.");
-          return;
-        }
-        toast.promise(navigator.clipboard.writeText(JSON.stringify(clipboardData)), {
-          success: "Blocks copied successfully",
-          error: "Failed to copy blocks to clipboard",
-        });
+        if (window) {
+          if (!navigator.clipboard) {
+            toast.error("Clipboard not available.");
+            return;
+          }
+          toast.promise(navigator.clipboard.writeText(JSON.stringify(clipboardData)), {
+            success: "Blocks copied successfully",
+            error: "Failed to copy blocks to clipboard",
+          });
+       }
       } catch (error) {
         toast.error("Failed to copy blocks to clipboard");
         console.error("Failed to copy blocks to clipboard:", error);
