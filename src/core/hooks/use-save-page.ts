@@ -67,10 +67,12 @@ export const useSavePage = () => {
         return;
       }
       setSaveState("SAVING");
+      console.log("5 set save state")
       onSaveStateChange("SAVING");
+      console.log("6 save state change")
       const pageData = getPageData();
 
-      console.log("5")
+      console.log("7")
 
       await onSave({
         autoSave,
@@ -82,7 +84,7 @@ export const useSavePage = () => {
         setSaveState("SAVED");
         onSaveStateChange("SAVED");
       }, 100);
-      console.log("6")
+      console.log("8")
       return true;
     },
     [getPageData, setSaveState, theme, onSave, onSaveStateChange, isPageLoaded],
