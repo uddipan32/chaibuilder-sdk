@@ -10,8 +10,6 @@ export const getHTMLFromBlocks = async (blocks: any, theme: any): Promise<string
   // Import the necessary functions for server-side rendering
   const { getChaiThemeCssVariables, getStylesForBlocks, RenderChaiBlocks } = await import("@/render");
   const { getMergedPartialBlocks } = await import("@/render/functions");
-  const { EXTERNAL_DATA } = await import("@/_demo/EXTERNAL_DATA");
-  const { PARTIALS } = await import("@/_demo/PARTIALS");
   
   // Generate styles server-side
   const allStyles = await getStylesForBlocks(blocks, true);
@@ -26,7 +24,7 @@ export const getHTMLFromBlocks = async (blocks: any, theme: any): Promise<string
       lang: "fr",
       fallbackLang: "en",
       externalData: {
-        ...EXTERNAL_DATA,
+        // ...EXTERNAL_DATA,
         "#promotions/ppqlwb": [
           { name: "Promotion 1", date: "2025-05-19", image: "https://picsum.photos/500/300" },
           { name: "Promotion 2", date: "2025-05-20", image: "https://picsum.photos/500/310" },
@@ -34,7 +32,7 @@ export const getHTMLFromBlocks = async (blocks: any, theme: any): Promise<string
       },
       pageProps: { slug: "chai-builder" },
       draft: true,
-      blocks: getMergedPartialBlocks(blocks, PARTIALS),
+      blocks: getMergedPartialBlocks(blocks, null),
       dataProviderMetadataCallback: (block: any, meta: any) => {
         console.log("meta", meta);
         console.log("block", block);
