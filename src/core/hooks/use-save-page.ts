@@ -70,14 +70,14 @@ export const useSavePage = () => {
 
       
 
-      const html  = await getHTMLFromBlocks(pageData.blocks, theme )
+      const domElements  = await getHTMLFromBlocks(pageData.blocks, theme )
 
       await onSave({
         autoSave,
         blocks: pageData.blocks,
         theme,
         needTranslations: needTranslations(),
-        html
+        domElements
       });
       setTimeout(() => {
         setSaveState("SAVED");
