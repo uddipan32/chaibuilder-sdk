@@ -8,7 +8,7 @@ import { atom, useAtom } from "jotai";
 import { has, isEmpty, noop } from "lodash-es";
 import { useLanguages } from "@/core/hooks/use-languages";
 import { useIsPageLoaded } from "@/core/hooks/use-is-page-loaded";
-import { getHTMLFromBlocks } from "../lib";
+import { getHTMLFromBlocks } from "../export-html/json-to-html";
 export const builderSaveStateAtom = atom<"SAVED" | "SAVING" | "UNSAVED">("SAVED"); // SAVING
 builderSaveStateAtom.debugLabel = "builderSaveStateAtom";
 
