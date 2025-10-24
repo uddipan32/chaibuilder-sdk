@@ -2,7 +2,7 @@ import Highlight from "@tiptap/extension-highlight";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
-import { Color, TextStyle } from "@tiptap/extension-text-style";
+import { TextStyle } from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
 import { Editor, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -41,9 +41,9 @@ export const useRTEditor = ({
       extensions: [
         StarterKit,
         TextStyle,
-        Color.configure({
-          types: ["textStyle"],
-        }),
+        // Color.configure({
+        //   types: ["textStyle"],
+        // }),
         Highlight.configure({
           multicolor: true,
         }),

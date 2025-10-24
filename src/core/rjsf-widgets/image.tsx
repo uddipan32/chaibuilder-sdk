@@ -9,6 +9,8 @@ import { useLanguages, useSelectedBlock, useUpdateBlocksProps } from "../hooks";
 import { usePageExternalData } from "@/core/atoms/builder";
 import { applyBindingToBlockProps } from "@/render/apply-binding";
 
+import { useSavePage } from "@/core/hooks";
+
 const PLACEHOLDER_IMAGE =
   "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZmlsbD0iI2Q1ZDdkYSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIFBsYWNlaG9sZGVyPC90ZXh0Pjwvc3ZnPg==";
 
@@ -29,6 +31,7 @@ const getFileName = (value: string) => {
 };
 
 const ImagePickerField = ({ value, onChange, id, onBlur }: WidgetProps) => {
+  const { uploadImage } = useSavePage();
   const { t } = useTranslation();
   const { selectedLang } = useLanguages();
   const selectedBlock = useSelectedBlock();
@@ -133,13 +136,23 @@ const ImagePickerField = ({ value, onChange, id, onBlur }: WidgetProps) => {
         {showImagePicker && (
           <>
             <p className="max-w-[250px] truncate pr-2 text-xs text-gray-400">{fileName}</p>
-            <MediaManagerModal onSelect={handleSelect} assetId="">
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              onChange={async (e) => {
+                const url = await uploadImage(e.target.files[0]);
+                console.log("URL: ", url);
+                onChange(url);
+              }}
+            />
+            {/* <MediaManagerModal onSelect={handleSelect} assetId="">
               <small className="h-6 mb-1 w-full cursor-pointer rounded-md bg-secondary px-1 py-1 text-center text-xs text-secondary-foreground hover:bg-secondary/80">
                 {!isEmpty(resolvedValue) && resolvedValue !== PLACEHOLDER_IMAGE
                   ? t("Replace image")
                   : t("Choose image")}
               </small>
-            </MediaManagerModal>
+            </MediaManagerModal> */}
             <div className="text-center text-xs text-gray-400">OR</div>
           </>
         )}
@@ -149,7 +162,7 @@ const ImagePickerField = ({ value, onChange, id, onBlur }: WidgetProps) => {
           autoCorrect={"off"}
           spellCheck={"false"}
           type="url"
-          className="h-6  text-xs"
+          className="h-6 text-xs"
           placeholder={t("Enter image URL")}
           value={value === PLACEHOLDER_IMAGE ? "" : value}
           onBlur={({ target: { value: url } }) => onBlur(id, url)}

@@ -41,6 +41,7 @@ export const useSavePage = () => {
   const [saveState, setSaveState] = useAtom(builderSaveStateAtom);
   const onSave = useBuilderProp("onSave", async (_args) => {});
   const onSaveStateChange = useBuilderProp("onSaveStateChange", noop);
+  const onImageUpload = useBuilderProp("onImageUpload", async (_args) => {});
   const getPageData = useGetPageData();
   const [theme] = useTheme();
   const { hasPermission } = usePermissions();
@@ -110,5 +111,11 @@ export const useSavePage = () => {
     return true;
   };
 
-  return { savePage, savePageAsync, saveState, setSaveState, needTranslations };
+  const uploadImage =
+    async (file: File) => {
+      const url = await onImageUpload(file);
+      return url;
+    }
+
+  return { savePage, savePageAsync, saveState, setSaveState, needTranslations, uploadImage };
 };
