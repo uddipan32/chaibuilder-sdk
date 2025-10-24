@@ -1,7 +1,8 @@
 import React from "react";
-import ReactDOMServer from "react-dom/server";
 
-export const getHTMLFromBlocks = async (blocks: any, theme: any): Promise<string> => {
+export const getHTMLFromBlocks = async (blocks: any, theme: any): Promise<React.FunctionComponentElement<{
+    children?: React.ReactNode | undefined;
+}>> => {
   // Validate inputs
   if (!blocks || !Array.isArray(blocks)) {
     throw new Error("Blocks must be a valid array");
@@ -40,6 +41,5 @@ export const getHTMLFromBlocks = async (blocks: any, theme: any): Promise<string
     })
   );
 
-  const htmlString = ReactDOMServer.renderToString(element);
-  return htmlString;
+  return element;
 };
