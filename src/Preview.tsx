@@ -11,6 +11,7 @@ import "./core/index.css";
 import { ChaiBuilderThemeValues } from "./types/types";
 loadWebBlocks();
 registerCustomBlocks();
+import ReactDOMServer from "react-dom/server";
 
 function Preview() {
   const [blocks] = useAtom(lsBlocksAtom);
@@ -25,6 +26,36 @@ function Preview() {
     })();
   }, [blocks]);
   const themeVars = useMemo(() => getChaiThemeCssVariables(theme as ChaiBuilderThemeValues), [theme]);
+
+  const element = (
+    <>
+      <style>{themeVars}</style>
+      <style>{allStyles}</style>
+      <RenderChaiBlocks
+        lang="fr"
+        fallbackLang="en"
+        externalData={{
+          ...EXTERNAL_DATA,
+          "#promotions/ppqlwb": [
+            { name: "Promotion 1", date: "2025-05-19", image: "https://picsum.photos/500/300" },
+            { name: "Promotion 2", date: "2025-05-20", image: "https://picsum.photos/500/310" },
+          ],
+        }}
+        pageProps={{ slug: "chai-builder" }}
+        draft={true}
+        blocks={getMergedPartialBlocks(blocks, PARTIALS)}
+        dataProviderMetadataCallback={(block, meta) => {
+          console.log("meta", meta);
+          console.log("block", block);
+        }}
+      />
+    </>
+  );
+
+  const htmlString = ReactDOMServer.renderToString(element);
+
+  console.log(htmlString);
+
   return (
     <>
       <style>{themeVars}</style>

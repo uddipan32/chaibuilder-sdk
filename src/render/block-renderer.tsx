@@ -11,6 +11,7 @@ import { createElement, Suspense } from "react";
 import { applyBindingToBlockProps } from "./apply-binding";
 import DataProviderPropsBlock from "./async-props-block";
 import { getRuntimePropValues, RenderChaiBlocksProps } from "./render-chai-blocks";
+// import ReactDOMServer from "react-dom/server";
 
 const SuspenseFallback = () => <div></div>;
 
@@ -97,6 +98,25 @@ export const RenderBlock = (
       </Suspense>
     );
   }
+
+  // const element = createElement(Component, {
+  //   ...blockProps,
+  //   children: children({
+  //     _id: block._id,
+  //     _type: block._type,
+  //     ...(isArray(blockWithBinding.repeaterItems)
+  //       ? {
+  //           repeaterItems: applyLimit(blockWithBinding.repeaterItems, block),
+  //           $repeaterItemsKey: blockWithBinding.$repeaterItemsKey,
+  //           repeaterTotalItems: blockWithBinding.repeaterTotalItems ?? -1,
+  //         }
+  //       : {}),
+  //   }),
+  // });
+
+  // const htmlString = ReactDOMServer.renderToString(element);
+
+  // console.log(htmlString);
 
   return (
     <Suspense>

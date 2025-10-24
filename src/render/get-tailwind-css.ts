@@ -58,6 +58,10 @@ async function getTailwindCSS(markupString: string[], safelist: string[] = [], i
  * @returns The tailwind css for the blocks
  */
 const getBlocksTailwindCSS = (blocks: ChaiBlock[], includeBaseStyles: boolean) => {
+  if (!blocks || !Array.isArray(blocks)) {
+    return getTailwindCSS([""], [], includeBaseStyles);
+  }
+  
   const blocksString = JSON.stringify(blocks).replace(/#styles:([^"]*)/g, (_match, content) => {
     return `#styles:${content.replace(/,/g, " ")}`.replace(/#styles:/g, "");
   });

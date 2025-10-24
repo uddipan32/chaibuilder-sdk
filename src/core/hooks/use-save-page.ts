@@ -8,6 +8,7 @@ import { atom, useAtom } from "jotai";
 import { has, isEmpty, noop } from "lodash-es";
 import { useLanguages } from "@/core/hooks/use-languages";
 import { useIsPageLoaded } from "@/core/hooks/use-is-page-loaded";
+import { getHTMLFromBlocks } from "../lib";
 export const builderSaveStateAtom = atom<"SAVED" | "SAVING" | "UNSAVED">("SAVED"); // SAVING
 builderSaveStateAtom.debugLabel = "builderSaveStateAtom";
 
@@ -37,7 +38,6 @@ export const checkMissingTranslations = (blocks: any[], lang: string): boolean =
 };
 
 export const useSavePage = () => {
-  console.log("1")
   const [saveState, setSaveState] = useAtom(builderSaveStateAtom);
   const onSave = useBuilderProp("onSave", async (_args) => {});
   const onSaveStateChange = useBuilderProp("onSaveStateChange", noop);
@@ -47,7 +47,6 @@ export const useSavePage = () => {
   const { selectedLang, fallbackLang } = useLanguages();
   const [isPageLoaded] = useIsPageLoaded();
 
-  console.log("2")
 
   const needTranslations = () => {
     const pageData = getPageData();
@@ -59,33 +58,31 @@ export const useSavePage = () => {
   const savePage = useThrottledCallback(
 
     async (autoSave: boolean = false) => {
-      console.log("3 save")
       // if (!hasPermission("save_page") || !isPageLoaded) {
-        console.log("4 No permission to save");
-        console.log("has permission", hasPermission("save_page"))
-        console.log("is page loaded", isPageLoaded)
+        // console.log("4 No permission to save");
+        // console.log("has permission", hasPermission("save_page"))
+        // console.log("is page loaded", isPageLoaded)
         // return;
       // }
-      console.log("5")
       setSaveState("SAVING");
-      console.log("5 set save state")
       onSaveStateChange("SAVING");
-      console.log("6 save state change")
       const pageData = getPageData();
 
-      console.log("7")
+      
+
+      const html  = await getHTMLFromBlocks(pageData.blocks, theme )
 
       await onSave({
         autoSave,
         blocks: pageData.blocks,
         theme,
         needTranslations: needTranslations(),
+        html
       });
       setTimeout(() => {
         setSaveState("SAVED");
         onSaveStateChange("SAVED");
       }, 100);
-      console.log("8")
       return true;
     },
     [getPageData, setSaveState, theme, onSave, onSaveStateChange, isPageLoaded],
@@ -93,7 +90,6 @@ export const useSavePage = () => {
   );
 
   const savePageAsync = async () => {
-    console.log("4 save async")
     if (!hasPermission("save_page") || !isPageLoaded) {
       return;
     }

@@ -51,6 +51,7 @@ export type SavePageData = {
   blocks: ChaiBlock[];
   theme?: ChaiThemeValues;
   needTranslations?: boolean;
+  html?: string;
 };
 
 type TimeInSeconds = number;
@@ -250,7 +251,7 @@ export interface ChaiBuilderEditorProps {
    * onSave callback function
    * @param saveData
    */
-  onSave?: ({ blocks, theme, autoSave }: SavePageData) => Promise<boolean | Error>;
+  onSave?: ({ blocks, theme, autoSave, html }: SavePageData) => Promise<boolean | Error>;
 
   /**
    * onSaveStateChange callback function

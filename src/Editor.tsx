@@ -47,8 +47,9 @@ function ChaiBuilderDefault() {
       autoSave={true}
       autoSaveInterval={15}
       blocks={blocks}
-      onSave={async ({ blocks, theme, needTranslations }: SavePageData) => {
-        console.log("onSave", blocks, theme, needTranslations);
+      onSave={async ({ blocks, theme, needTranslations, html }: SavePageData) => {
+        console.log("onSave", blocks, theme, needTranslations, html);
+        console.log("HTML:", html);
         localStorage.setItem("chai-builder-blocks", JSON.stringify(blocks));
         localStorage.setItem("chai-builder-theme", JSON.stringify(theme));
         setTheme(theme);

@@ -8,7 +8,7 @@ import { NoopComponent } from "@/core/components/noop-component";
 import SettingsPanel from "@/core/components/settings/settings-panel";
 import ThemeConfigPanel from "@/core/components/sidepanels/panels/theme-configuration/ThemeConfigPanel";
 import { useChaiSidebarPanels } from "@/core/extensions/sidebar-panels";
-import { useTopBarComponent } from "@/core/extensions/top-bar";
+// import { useTopBarComponent } from "@/core/extensions/top-bar";
 import { useBuilderProp, useSidebarActivePanel } from "@/core/hooks";
 import { useRightPanel } from "@/core/hooks/use-theme";
 import { isDevelopment } from "@/core/import-html/general";
@@ -32,7 +32,7 @@ import React, {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { AiIcon } from "../ai/ai-icon";
+// import { AiIcon } from "../ai/ai-icon";
 import Topbar from "@/_demo/top-bar";
 
 const DEFAULT_PANEL_WIDTH = 280;
@@ -52,31 +52,32 @@ const AiButton = ({ isActive, show }: { isActive: boolean; show: () => void; pan
     </Button>
   );
 };
-const AskAiButton = ({ isActive, show }: { isActive: boolean; show: () => void; panelId: string }) => {
-  return (
-    <Button variant={isActive ? "default" : "ghost"} size="icon" onClick={show}>
-      <AiIcon />
-    </Button>
-  );
-};
+// const AskAiButton = ({ isActive, show }: { isActive: boolean; show: () => void; panelId: string }) => {
+//   return (
+//     <Button variant={isActive ? "default" : "ghost"} size="icon" onClick={show}>
+//       <AiIcon />
+//     </Button>
+//   );
+// };
 function useSidebarDefaultPanels() {
   const askAiCallBack = useBuilderProp("askAiCallBack", null);
   const aiChat = useFeature("aiChat");
   return useMemo(() => {
     const items = [];
 
-    items.push({
-      id: "ask-ai",
-      button: AskAiButton,
-      label: "Ask AI",
-      isInternal: true,
-      width: DEFAULT_PANEL_WIDTH,
-      panel: () => (
-        <div className="">
-          <AskAI />
-        </div>
-      ),
-    });
+    // ask ai
+    // items.push({
+    //   id: "ask-ai",
+    //   button: AskAiButton,
+    //   label: "Ask AI",
+    //   isInternal: true,
+    //   width: DEFAULT_PANEL_WIDTH,
+    //   panel: () => (
+    //     <div className="">
+    //       <AskAI />
+    //     </div>
+    //   ),
+    // });
 
     items.push({
       id: "outline",
@@ -113,7 +114,7 @@ function useSidebarDefaultPanels() {
  * RootLayout is a React component that renders the main layout of the application.
  */
 const RootLayout: ComponentType = () => {
-  const TopBar = useTopBarComponent();
+  // const TopBar = useTopBarComponent();
   const [activePanel, setActivePanel] = useSidebarActivePanel();
   const lastStandardPanelRef = useRef<string | null>("outline"); // Default to "outline"
   const [lastStandardPanelWidth, setLastStandardPanelWidth] = useState(DEFAULT_PANEL_WIDTH);
@@ -203,11 +204,11 @@ const RootLayout: ComponentType = () => {
         <div
           onContextMenu={preventContextMenu}
           className="flex h-full max-h-full flex-col bg-background text-foreground">
-          <div className="flex h-[50px] w-screen items-center border-b border-border">
+          {/* <div className="flex h-[50px] w-screen items-center border-b border-border">
             <Suspense>
               <TopBar />
             </Suspense>
-          </div>
+          </div> */}
           <Topbar />
 
           <main className="relative flex h-[calc(100vh-56px)] max-w-full flex-1 flex-row">
