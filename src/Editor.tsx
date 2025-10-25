@@ -32,7 +32,7 @@ function ChaiBuilderDefault() {
   return (
     <ChaiBuilderEditor
       _tempProps={{
-        librarySite: false,
+        librarySite: true,
       }}
       gotoPage={(args) => {
         console.log("gotoPage", args);
