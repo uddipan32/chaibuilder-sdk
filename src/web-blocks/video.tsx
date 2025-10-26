@@ -142,7 +142,7 @@ const CustomVideoSource = (props: ChaiBlockComponentProps<VideoBlockProps>) => {
 
   return (
     (_poster || !isEmpty(sortedSources)) && (
-      <div className="relative w-full overflow-hidden" style={{ paddingBottom: "56.25%" }}>
+      <div className="relative w-full overflow-hidden" style={{}}>
         <video
           {...styles}
           {...blockProps}
@@ -186,7 +186,7 @@ const Config = {
   group: "media",
   ...registerChaiBlockSchema({
     properties: {
-      styles: StylesProp("absolute h-full w-full object-cover"),
+      styles: StylesProp("w-full"),
       videoSource: {
         type: "string",
         default: "Custom",
