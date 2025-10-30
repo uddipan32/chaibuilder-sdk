@@ -1,6 +1,6 @@
 export const ScreenTooSmall = () => {
   return (
-    <section className="fixed inset-0 z-50 flex h-screen w-screen items-center justify-center bg-white bg-[linear-gradient(to_right,#f3f4f6_1px,transparent_1px),linear-gradient(to_bottom,#f3f4f6_1px,transparent_1px)] bg-[size:10px_10px] py-12 sm:py-16 lg:py-20 xl:hidden">
+    <section className="fixed inset-0 z-50 flex h-screen w-screen items-center justify-center bg-white bg-[linear-gradient(to_right,#f3f4f6_1px,transparent_1px),linear-gradient(to_bottom,#f3f4f6_1px,transparent_1px)] bg-[size:10px_10px] py-12 sm:py-16 md:hidden lg:hidden lg:py-20 xl:hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-md space-y-6 text-center">
           <img
