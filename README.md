@@ -1,3 +1,8 @@
+# Build and pack
+
+npm run build
+npm pack
+
 # Chai Builder - Open Source Tailwind Builder
 
 Chai Builder is an Open Source Low Code React + Tailwind CSS Visual Builder.
