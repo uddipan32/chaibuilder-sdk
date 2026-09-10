@@ -1,3 +1,0 @@
-export const QUERY_KEYS = {
-  SITE_WIDE_USAGE: "SITE_WIDE_USAGE",
-};
