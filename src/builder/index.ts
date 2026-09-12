@@ -9,16 +9,17 @@ import { useGotoPage } from "~/builder/pages/hooks/use-goto-page";
 import { useClearAll, useReloadPage } from "~/builder/pages/hooks/use-reload-page";
 import { useUpdateActivePageMetadata } from "~/builder/pages/hooks/use-update-metadata";
 import { defaultChaiLibrary, useTranslation } from "./core/main";
-import { logChaiCoreVersionBanner } from "./core/functions/version-banner";
+import { CHAI_PACKAGE_NAME } from "~/edition/identity";
+import { logChaiVersionBanner } from "./core/functions/version-banner";
 import { useSavePage } from "./hooks/use-save-page";
 import { ChaiWebsiteBuilder } from "./pages/chaibuilder-pages";
 
 if (typeof window === "undefined") {
-  throw new Error("chaicore is not available on the server");
+  throw new Error(`${CHAI_PACKAGE_NAME} is not available on the server`);
 }
 
 // Client entry — runs as soon as the builder chunk is evaluated in the browser.
-logChaiCoreVersionBanner();
+logChaiVersionBanner();
 
 export { PermissionChecker } from "~/builder/pages/client/components/permission-checker";
 export { SmartJsonInput as ChaiJsonInput } from "~/builder/pages/client/components/smart-json-input";
@@ -58,7 +59,7 @@ export {
 
 /**
  * Realtime contract. The feature itself ships as the `chai:realtime` client plugin
- * (`chaicore/plugins/realtime/client`); these read the state it publishes and are
+ * (`<pkg>/plugins/realtime/client`, pro editions); these read the state it publishes and are
  * safe to call with the plugin absent — the page then reads as unlocked.
  */
 export {

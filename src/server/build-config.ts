@@ -2,6 +2,7 @@ import "~/server/only-server";
 import { registerDb } from "~/db/core";
 import { syncBlockDataProvidersToRegistry } from "~/server/defaults/block-data-providers";
 import { setActiveChaiBuilderConfig } from "~/server/defaults/config-registry";
+import { editionServerPlugins } from "~/edition/builtin-server-plugins";
 import { registerChaiRequestMiddleware } from "~/server/plugin-api/request-middleware";
 import type { ChaiSchemaFragment } from "~/types/plugin";
 import { setChaiContextResolver } from "./chai-context-resolver";
@@ -44,9 +45,11 @@ export function buildChaiBuilderConfig<TExtra extends Record<string, unknown> = 
   config: ChaiBuilderServerConfigInput,
   options?: BuildChaiBuilderConfigOptions<TExtra>,
 ): Readonly<ResolvedChaiBuilderServerConfig & TExtra> {
+  // Edition-level always-on plugins run first so app/plugin config still gets
+  // the last word on everything else they touch.
   const resolved = resolveChaiBuilderConfig({
     ...config,
-    plugins: [...(config.plugins ?? [])],
+    plugins: [...editionServerPlugins(), ...(config.plugins ?? [])],
   });
   const extended = { ...resolved, ...(options?.extend ?? {}) } as ResolvedChaiBuilderServerConfig & TExtra;
   extended.db = withPluginSchema(extended.db, extended.schemaFragments);

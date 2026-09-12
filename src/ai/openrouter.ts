@@ -12,7 +12,7 @@
  *
  * Hosts that ship OpenRouter register this plugin instead. It lives behind its
  * own entry point precisely because the import below is unconditional: importing
- * `chaicore/ai/openrouter` without the package installed is a build error, so
+ * `<pkg>/ai/openrouter` without the package installed is a build error, so
  * only apps that depend on OpenRouter may reach for it.
  *
  * Behaviour is otherwise identical to the built-in plugin — same env vars, same
@@ -21,7 +21,7 @@
  * @example
  * ```typescript
  * // chaibuilder.config.ts
- * import { openRouterPlugin } from "chaicore/ai/openrouter";
+ * import { openRouterPlugin } from "<pkg>/ai/openrouter";
  *
  * buildChaiBuilderConfig({
  *   ai: { providers: [openRouterPlugin], models: [...] },

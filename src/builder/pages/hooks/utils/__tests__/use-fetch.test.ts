@@ -4,6 +4,10 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { usePagesProp } from "~/builder/pages/hooks/project/use-builder-prop";
 import { fetchAPI } from "~/builder/pages/utils/fetch-api";
+import {
+  registerChaiFetchInterceptor,
+  resetChaiFetchInterceptorsForTests,
+} from "~/builder/register-apis/register-chai-fetch-interceptor";
 import { useFetch } from "../use-fetch";
 
 vi.mock("~/builder/pages/utils/fetch-api");
@@ -15,6 +19,7 @@ describe("useFetch", () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    resetChaiFetchInterceptorsForTests();
   });
 
   describe("beforeRequest Hook Integration", () => {
@@ -512,6 +517,105 @@ describe("useFetch", () => {
         },
         { signal: abortController.signal },
       );
+    });
+  });
+  describe("fetch interceptors", () => {
+    const mockProps = () => {
+      vi.mocked(usePagesProp).mockImplementation((key: string) => {
+        if (key === "getAccessToken") return vi.fn(async () => "mock-token");
+        if (key === "onLogout") return vi.fn();
+        return undefined;
+      });
+    };
+
+    it("merges interceptor headers under the caller's headers and Authorization", async () => {
+      mockProps();
+      registerChaiFetchInterceptor("chai:test", {
+        headers: ({ action }) => ({ "x-hint": `for-${action}`, "X-Custom-Header": "from-interceptor" }),
+      });
+      vi.mocked(fetchAPI).mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: vi.fn(async () => ({ ok: true, data: {} })),
+      } as any);
+
+      const { result } = renderHook(() => useFetch());
+      await result.current("https://api.test.com", { action: "GET_PAGES", data: {} }, { "X-Custom-Header": "caller" });
+
+      expect(fetchAPI).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.any(Object),
+        { "x-hint": "for-GET_PAGES", "X-Custom-Header": "caller", Authorization: "Bearer mock-token" },
+        undefined,
+      );
+    });
+
+    it("hands the parsed body to onResponse on success and on 401", async () => {
+      mockProps();
+      const onResponse = vi.fn();
+      registerChaiFetchInterceptor("chai:test", { onResponse });
+      vi.spyOn(console, "log").mockImplementation(() => {});
+
+      vi.mocked(fetchAPI).mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: vi.fn(async () => ({ ok: true, data: { a: 1 }, license: { state: "valid" } })),
+      } as any);
+      const { result } = renderHook(() => useFetch());
+      await result.current("https://api.test.com", { action: "GET_PAGES", data: {} });
+
+      expect(onResponse).toHaveBeenCalledWith({
+        action: "GET_PAGES",
+        status: 200,
+        body: { ok: true, data: { a: 1 }, license: { state: "valid" } },
+      });
+
+      vi.mocked(fetchAPI).mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+        json: vi.fn(async () => ({ ok: false, error: { status: 401, message: "nope", code: "UNAUTHORIZED" } })),
+      } as any);
+      await result.current("https://api.test.com", { action: "GET_PAGES", data: {} });
+
+      expect(onResponse).toHaveBeenLastCalledWith(expect.objectContaining({ status: 401 }));
+    });
+
+    it("logs and ignores a throwing interceptor so the request still succeeds", async () => {
+      mockProps();
+      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      registerChaiFetchInterceptor("chai:broken", {
+        headers: () => {
+          throw new Error("headers boom");
+        },
+        onResponse: () => {
+          throw new Error("response boom");
+        },
+      });
+      vi.mocked(fetchAPI).mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: vi.fn(async () => ({ ok: true, data: { fine: true } })),
+      } as any);
+
+      const { result } = renderHook(() => useFetch());
+      const response = await result.current("https://api.test.com", { action: "GET_PAGES", data: {} });
+
+      expect(response).toEqual(expect.objectContaining({ fine: true }));
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it("skips onResponse for streaming responses", async () => {
+      mockProps();
+      const onResponse = vi.fn();
+      registerChaiFetchInterceptor("chai:test", { onResponse });
+      const streaming = { ok: true, status: 200, body: "stream" };
+      vi.mocked(fetchAPI).mockResolvedValue(streaming as any);
+
+      const { result } = renderHook(() => useFetch());
+      const response = await result.current("https://api.test.com", { action: "AI_CHAT", data: {} }, {}, true);
+
+      expect(response).toBe(streaming);
+      expect(onResponse).not.toHaveBeenCalled();
     });
   });
 });

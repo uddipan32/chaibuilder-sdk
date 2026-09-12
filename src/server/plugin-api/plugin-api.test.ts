@@ -5,8 +5,10 @@ import { schema } from "~/server/chai-actions/db";
 import { getChaiContextResolver, resetChaiContextResolverForTests } from "~/server/chai-context-resolver";
 import { resolveChaiBuilderConfig } from "~/server/defaults";
 import { resetActiveChaiBuilderConfigForTests } from "~/server/defaults/config-registry";
+import { runInContext } from "~/server/chai-builder/state";
 import {
   defineChaiServerPlugin,
+  getChaiRequestHeader,
   getContributedChaiInstanceApis,
   getContributedChaiPermissions,
   mergeDefaultRoleGrants,
@@ -30,6 +32,17 @@ import type { ChaiAction } from "~/types/chai-action";
 
 const stubAction = (name: string): ChaiAction<any, any> =>
   ({ name, execute: async () => ({ ok: name }) }) as unknown as ChaiAction<any, any>;
+
+describe("getChaiRequestHeader", () => {
+  it("returns the first value of a header from the current request state, or null", () => {
+    const requestHeaders = { get: (name: string) => (name === "x-hint" ? "first, second" : null) };
+    const context = { appId: "app-1", requestHeaders } as any;
+
+    expect(runInContext(context, () => getChaiRequestHeader("x-hint"))).toBe("first");
+    expect(runInContext(context, () => getChaiRequestHeader("x-missing"))).toBeNull();
+    expect(getChaiRequestHeader("x-hint")).toBeNull();
+  });
+});
 
 describe("server plugins", () => {
   beforeEach(() => {

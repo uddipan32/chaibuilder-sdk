@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { editionTestCleanup } from "~/edition/test-harness";
 import type { ChaiBaseAction } from "~/server/chai-actions/base-action";
 import type { ChaiActionContext } from "~/types";
 import { getGlobalAppId } from "./global-test-app";
@@ -50,11 +51,12 @@ export async function withTestDB<T>(testFn: (ctx: WithTestDBContext) => Promise<
 }
 
 export async function cleanupTestData(db: TestDb): Promise<void> {
-  // Core tables only. A plugin that owns tables is responsible for cleaning up its own —
-  // see its schema fragment.
+  // Core tables, then whatever edition-owned tables shared actions write into (see
+  // src/edition/test-harness.ts). FK checks stay off for the whole window.
   db.run(sql`PRAGMA foreign_keys = OFF`);
   await db.delete(schema.appPagesOnline);
   await db.delete(schema.appPages);
   await db.delete(schema.appAssets);
+  await editionTestCleanup(db);
   db.run(sql`PRAGMA foreign_keys = ON`);
 }

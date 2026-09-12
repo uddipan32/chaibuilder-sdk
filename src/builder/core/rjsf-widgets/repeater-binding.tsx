@@ -14,7 +14,7 @@ export const RepeaterBindingWidget = ({ value, onChange }: WidgetProps) => {
 
   if (!value) {
     return (
-      <div className="mt-1 flex h-8 items-center gap-2 rounded-md border border-input bg-muted/50 px-2 py-1 text-xs text-muted-foreground">
+      <div className="border-input bg-muted/50 text-muted-foreground mt-1 flex h-8 items-center gap-2 rounded-md border px-2 py-1 text-xs">
         <FileIcon className="h-3.5 w-3.5" /> Choose a data source
       </div>
     );

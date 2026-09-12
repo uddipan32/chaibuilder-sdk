@@ -18,7 +18,8 @@ vi.mock("~/components/ui/tooltip", () => ({
 const sourceMock = useRepeaterSource as ReturnType<typeof vi.fn>;
 const builderPropMock = useBuilderProp as ReturnType<typeof vi.fn>;
 
-const widget = (value: string) => render(<RepeaterBindingWidget {...({ value, onChange: vi.fn() } as unknown as WidgetProps)} />);
+const widget = (value: string) =>
+  render(<RepeaterBindingWidget {...({ value, onChange: vi.fn() } as unknown as WidgetProps)} />);
 
 beforeEach(() => {
   builderPropMock.mockImplementation((key: string, fallback: unknown) =>

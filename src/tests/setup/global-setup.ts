@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { editionTestCleanup } from "~/edition/test-harness";
 import { resetDbForTests } from "~/server/chai-actions/db";
 import { deleteGlobalApp, getGlobalAppId, insertGlobalApp } from "./global-test-app";
 import { runTestMigrations } from "./migrations";
@@ -23,6 +24,7 @@ export default async function globalSetup() {
     await db.delete(schema.appPagesOnline);
     await db.delete(schema.appPages);
     await db.delete(schema.appAssets);
+    await editionTestCleanup(db);
     db.run(sql`PRAGMA foreign_keys = ON`);
 
     await deleteGlobalApp(db, globalAppId);

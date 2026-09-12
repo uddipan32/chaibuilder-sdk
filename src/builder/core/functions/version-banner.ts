@@ -1,11 +1,12 @@
 import { CHAI_VERSION, IS_CHAI_BUNDLED } from "~/constants/VERSION";
+import { CHAI_EDITION_LABEL } from "~/edition/identity";
 
 /**
  * Kept on `window` rather than in module scope so the banner stays a once-per-page
  * event even when the module graph is re-evaluated — HMR in dev, or two copies of
  * the package ending up in the same bundle.
  */
-const BANNER_FLAG = "__chaiCoreVersionBannerPrinted__";
+const BANNER_FLAG = "__chaiVersionBannerPrinted__";
 
 const DOCS_URL = "https://www.chaibuilder.com/docs";
 const HOME_URL = "https://chaibuilder.com";
@@ -37,7 +38,7 @@ const WARNING_STYLE = "color:#f59e0b;font-weight:600;font-size:12px";
 const LINK_STYLE = "color:#60a5fa;font-weight:400;font-size:12px";
 
 /**
- * Prints the ChaiBuilder Core build banner to the browser console, exactly once per page load.
+ * Prints the ChaiBuilder build banner (with the edition label) to the browser console, exactly once per page load.
  *
  * Two audiences share this console: developers, who want to know which version of the
  * package is actually running before they report anything, and everyone else, who opened
@@ -47,7 +48,7 @@ const LINK_STYLE = "color:#60a5fa;font-weight:400;font-size:12px";
  *
  * Safe to call from anywhere; it no-ops on the server and on repeat calls.
  */
-export const logChaiCoreVersionBanner = (): void => {
+export const logChaiVersionBanner = (): void => {
   if (typeof window === "undefined") return;
 
   type BannerFlag = typeof BANNER_FLAG;
@@ -59,7 +60,7 @@ export const logChaiCoreVersionBanner = (): void => {
   const version = IS_CHAI_BUNDLED ? `v${CHAI_VERSION}` : `${CHAI_VERSION} (source)`;
 
   console.log(
-    `%c ☕ CHAIBUILDER CORE %c ${version} %c\n\n` +
+    `%c ☕ CHAIBUILDER ${CHAI_EDITION_LABEL} %c ${version} %c\n\n` +
       `%c👋 Not a developer? You've opened the browser console.%c\n` +
       `   It's a tool for engineers. Nothing is broken, and you can close it safely —\n` +
       `   just press Escape or click the ✕ on this panel.\n\n` +

@@ -1,7 +1,7 @@
 /**
  * OpenAI-compatible provider plugin with a *static* import of the SDK.
  *
- * Same trade as `chaicore/ai/openrouter`: the built-in plugin
+ * Same trade as `<pkg>/ai/openrouter`: the built-in plugin
  * (`src/server/chai-actions/ai-providers/openai-compatible.ts`) loads
  * `@ai-sdk/openai-compatible` through `importOptionalPeer()`, an import no
  * bundler can see — which keeps the package optional, and also keeps Next's
@@ -10,7 +10,7 @@
  *
  * Hosts that ship an OpenAI-compatible endpoint register this plugin instead.
  * It lives behind its own entry point because the import below is
- * unconditional: importing `chaicore/ai/openai-compatible` without the package
+ * unconditional: importing `<pkg>/ai/openai-compatible` without the package
  * installed is a build error.
  *
  * Behaviour is otherwise identical to the built-in plugin — same env vars, same
@@ -20,7 +20,7 @@
  * @example
  * ```typescript
  * // chaibuilder.config.ts
- * import { openAICompatiblePlugin } from "chaicore/ai/openai-compatible";
+ * import { openAICompatiblePlugin } from "<pkg>/ai/openai-compatible";
  *
  * buildChaiBuilderConfig({
  *   ai: { providers: [openAICompatiblePlugin], models: [...] },

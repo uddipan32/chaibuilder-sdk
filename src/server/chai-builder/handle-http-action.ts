@@ -60,8 +60,7 @@ async function handleCacheRevalidation(response: unknown, catchAllRoute?: string
     return;
   }
 
-  const revalidateTagFn = (tag: string) =>
-    invalidateTag.length >= 2 ? invalidateTag(tag, "max") : invalidateTag(tag);
+  const revalidateTagFn = (tag: string) => (invalidateTag.length >= 2 ? invalidateTag(tag, "max") : invalidateTag(tag));
 
   const invalidations: Array<void | Promise<void>> = [];
 

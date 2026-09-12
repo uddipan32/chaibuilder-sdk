@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { drizzle, type BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { mkdirSync } from "fs";
 import { dirname, resolve } from "path";
-import * as schema from "~/drizzle/schema.sqlite";
+import * as schema from "~/edition/test-schema";
 
 dotenv.config({ path: ".env.test" });
 

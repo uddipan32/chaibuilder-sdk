@@ -35,10 +35,7 @@ export type ChaiAiActionInfo = {
  * prompt and returns the one to use — return `defaultPrompt` unchanged to opt
  * out for a given action. Chained: each customizer sees the previous result.
  */
-export type ChaiAiPromptCustomizer = (
-  defaultPrompt: string,
-  info: ChaiAiActionInfo,
-) => string | Promise<string>;
+export type ChaiAiPromptCustomizer = (defaultPrompt: string, info: ChaiAiActionInfo) => string | Promise<string>;
 
 /**
  * Contributes extra AI-SDK-compatible tools to an AI action. Return a

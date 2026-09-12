@@ -2,6 +2,7 @@ import { CHAI_SLOT_IDS } from "~/constants/CHAI_SLOT_IDS";
 
 export * from "./register-block-settings";
 export * from "./register-chai-add-block-tab";
+export * from "./register-chai-fetch-interceptor";
 export * from "./register-chai-flag";
 export * from "./register-chai-hooks";
 export * from "./register-chai-library";

@@ -55,9 +55,7 @@ export const compileTailwindCss = async ({
   const tailwindModule = (await import("tailwindcss")) as unknown as { compile?: TailwindV4Compile };
 
   if (typeof tailwindModule.compile !== "function") {
-    throw new Error(
-      "Installed tailwindcss does not expose compile() — ChaiBuilder requires Tailwind v4.",
-    );
+    throw new Error("Installed tailwindcss does not expose compile() — ChaiBuilder requires Tailwind v4.");
   }
 
   const css = includeBaseStyles
