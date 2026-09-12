@@ -1,4 +1,4 @@
-import { CHAI_CORE_VERSION, IS_CHAI_CORE_BUNDLED } from "~/constants/VERSION";
+import { CHAI_VERSION, IS_CHAI_BUNDLED } from "~/constants/VERSION";
 
 /**
  * Kept on `window` rather than in module scope so the banner stays a once-per-page
@@ -56,7 +56,7 @@ export const logChaiCoreVersionBanner = (): void => {
   if (flagged[BANNER_FLAG]) return;
   flagged[BANNER_FLAG] = true;
 
-  const version = IS_CHAI_CORE_BUNDLED ? `v${CHAI_CORE_VERSION}` : `${CHAI_CORE_VERSION} (source)`;
+  const version = IS_CHAI_BUNDLED ? `v${CHAI_VERSION}` : `${CHAI_VERSION} (source)`;
 
   console.log(
     `%c ☕ CHAIBUILDER CORE %c ${version} %c\n\n` +
