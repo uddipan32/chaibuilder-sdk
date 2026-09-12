@@ -1,0 +1,319 @@
+{
+  "name": "chaicore",
+  "version": "0.1.0",
+  "description": "ChaiBuilder Core - Open source AI enabled website builder for Next.js",
+  "author": "Suraj Air",
+  "license": "BSD-3-Clause",
+  "homepage": "https://chaibuilder.com",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaibuilder/core.git"
+  },
+  "files": [
+    "dist",
+    "scripts/generate-styles.mjs"
+  ],
+  "bin": {
+    "chai-styles": "./scripts/generate-styles.mjs"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "main": "dist/builder.js",
+  "sideEffects": true,
+  "scripts": {
+    "dev": "tsup --watch --format esm,cjs",
+    "build": "NODE_OPTIONS='--max-old-space-size=6144' tsup --format esm,cjs && NODE_OPTIONS='--max-old-space-size=6144' node scripts/build-dts.mjs",
+    "build:dts": "NODE_OPTIONS='--max-old-space-size=6144' node scripts/build-dts.mjs",
+    "test": "vitest --run",
+    "test:integration": "vitest --run --config vitest.config.integration.ts",
+    "test:integration:watch": "vitest --config vitest.config.integration.ts",
+    "db:test:generate": "drizzle-kit generate --config drizzle.config.test.ts",
+    "db:test:studio": "drizzle-kit studio --config drizzle.config.test.ts",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "vendor:tailwind-css": "node scripts/vendor-tailwind-v4-css.mjs",
+    "prepare": "husky || true"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/builder.d.ts",
+      "import": "./dist/builder.js",
+      "require": "./dist/builder.cjs"
+    },
+    "./registry": {
+      "types": "./dist/registry.d.ts",
+      "import": "./dist/registry.js",
+      "require": "./dist/registry.cjs"
+    },
+    "./web-blocks": {
+      "types": "./dist/web-blocks.d.ts",
+      "import": "./dist/web-blocks.js",
+      "require": "./dist/web-blocks.cjs"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "import": "./dist/utils.js",
+      "require": "./dist/utils.cjs"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js",
+      "require": "./dist/types.cjs"
+    },
+    "./styles": {
+      "import": "./dist/builder.css",
+      "require": "./dist/builder.css"
+    },
+    "./ui/*": {
+      "types": "./dist/components/ui/*.d.ts",
+      "import": "./dist/components/ui/*.js",
+      "require": "./dist/components/ui/*.cjs"
+    },
+    "./nextjs": {
+      "types": "./dist/nextjs.d.ts",
+      "import": "./dist/nextjs.js",
+      "require": "./dist/nextjs.cjs"
+    },
+    "./nextjs/server": {
+      "types": "./dist/nextjs/server.d.ts",
+      "import": "./dist/nextjs/server.js",
+      "require": "./dist/nextjs/server.cjs"
+    },
+    "./nextjs/render": {
+      "types": "./dist/nextjs/render.d.ts",
+      "import": "./dist/nextjs/render.js",
+      "require": "./dist/nextjs/render.cjs"
+    },
+    "./nextjs/render-client": {
+      "types": "./dist/nextjs/render-client.d.ts",
+      "import": "./dist/nextjs/render-client.js",
+      "require": "./dist/nextjs/render-client.cjs"
+    },
+    "./db/libsql": {
+      "types": "./dist/db/libsql.d.ts",
+      "import": "./dist/db/libsql.js",
+      "require": "./dist/db/libsql.cjs"
+    },
+    "./db/d1": {
+      "types": "./dist/db/d1.d.ts",
+      "import": "./dist/db/d1.js",
+      "require": "./dist/db/d1.cjs"
+    },
+    "./db/better-sqlite3": {
+      "types": "./dist/db/better-sqlite3.d.ts",
+      "import": "./dist/db/better-sqlite3.js",
+      "require": "./dist/db/better-sqlite3.cjs"
+    },
+    "./db/schema-sqlite": {
+      "types": "./dist/db/schema-sqlite.d.ts",
+      "import": "./dist/db/schema-sqlite.js",
+      "require": "./dist/db/schema-sqlite.cjs"
+    },
+    "./db/relations-sqlite": {
+      "types": "./dist/db/relations-sqlite.d.ts",
+      "import": "./dist/db/relations-sqlite.js",
+      "require": "./dist/db/relations-sqlite.cjs"
+    },
+    "./plugins/client": {
+      "types": "./dist/plugins/client.d.ts",
+      "import": "./dist/plugins/client.js",
+      "require": "./dist/plugins/client.cjs"
+    },
+    "./plugins/page-errors/client": {
+      "types": "./dist/plugins/page-errors/client.d.ts",
+      "import": "./dist/plugins/page-errors/client.js",
+      "require": "./dist/plugins/page-errors/client.cjs"
+    },
+    "./tailwind": {
+      "types": "./dist/tailwind.d.ts",
+      "import": "./dist/tailwind.js",
+      "require": "./dist/tailwind.cjs"
+    },
+    "./ai/openrouter": {
+      "types": "./dist/ai/openrouter.d.ts",
+      "import": "./dist/ai/openrouter.js",
+      "require": "./dist/ai/openrouter.cjs"
+    },
+    "./ai/openai-compatible": {
+      "types": "./dist/ai/openai-compatible.d.ts",
+      "import": "./dist/ai/openai-compatible.js",
+      "require": "./dist/ai/openai-compatible.cjs"
+    },
+    "./plugins/empty-page-starter/client": {
+      "types": "./dist/plugins/empty-page-starter/client.d.ts",
+      "import": "./dist/plugins/empty-page-starter/client.js",
+      "require": "./dist/plugins/empty-page-starter/client.cjs"
+    }
+  },
+  "peerDependencies": {
+    "@ai-sdk/openai-compatible": ">=2.0.0",
+    "@libsql/client": ">=0.14.0",
+    "@openrouter/ai-sdk-provider": ">=2.0.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "ai": ">=6.0.0",
+    "better-sqlite3": ">=11.0.0",
+    "drizzle-orm": ">=0.44.0",
+    "next": ">=15.3.0",
+    "@next/third-parties": ">=15.3.0",
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0",
+    "tailwindcss": "^4.0.0",
+    "workers-ai-provider": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@ai-sdk/openai-compatible": {
+      "optional": true
+    },
+    "@openrouter/ai-sdk-provider": {
+      "optional": true
+    },
+    "next": {
+      "optional": true
+    },
+    "@next/third-parties": {
+      "optional": true
+    },
+    "@tailwindcss/postcss": {
+      "optional": true
+    },
+    "ai": {
+      "optional": true
+    },
+    "drizzle-orm": {
+      "optional": true
+    },
+    "@libsql/client": {
+      "optional": true
+    },
+    "better-sqlite3": {
+      "optional": true
+    },
+    "workers-ai-provider": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@ai-sdk/react": "3.0.221",
+    "@floating-ui/dom": "1.7.4",
+    "@floating-ui/react-dom": "2.1.6",
+    "@iconify-json/lucide": "1.2.82",
+    "@radix-ui/react-accordion": "1.2.12",
+    "@radix-ui/react-alert-dialog": "1.1.15",
+    "@radix-ui/react-avatar": "1.1.11",
+    "@radix-ui/react-checkbox": "1.3.3",
+    "@radix-ui/react-collapsible": "1.1.12",
+    "@radix-ui/react-context-menu": "2.2.16",
+    "@radix-ui/react-dialog": "1.1.15",
+    "@radix-ui/react-dropdown-menu": "2.1.16",
+    "@radix-ui/react-hover-card": "1.1.15",
+    "@radix-ui/react-icons": "1.3.2",
+    "@radix-ui/react-label": "2.1.8",
+    "@radix-ui/react-navigation-menu": "1.2.14",
+    "@radix-ui/react-popover": "1.1.15",
+    "@radix-ui/react-scroll-area": "1.2.10",
+    "@radix-ui/react-select": "2.2.6",
+    "@radix-ui/react-separator": "1.1.8",
+    "@radix-ui/react-slider": "1.3.6",
+    "@radix-ui/react-slot": "1.2.4",
+    "@radix-ui/react-switch": "1.2.6",
+    "@radix-ui/react-tabs": "1.1.13",
+    "@radix-ui/react-toggle": "1.1.10",
+    "@radix-ui/react-tooltip": "1.2.8",
+    "@react-hookz/web": "25.1.1",
+    "@rjsf/core": "5.24.13",
+    "@rjsf/utils": "5.24.13",
+    "@rjsf/validator-ajv8": "5.24.13",
+    "@tailwindcss/container-queries": "0.1.1",
+    "@tailwindcss/forms": "0.5.11",
+    "@tailwindcss/typography": "0.5.19",
+    "@tanstack/react-query": "5.90.16",
+    "@tiptap/extension-color": "2.27.1",
+    "@tiptap/extension-highlight": "2.27.1",
+    "@tiptap/extension-link": "2.27.1",
+    "@tiptap/extension-placeholder": "2.27.1",
+    "@tiptap/extension-text-align": "2.27.1",
+    "@tiptap/extension-text-style": "2.27.1",
+    "@tiptap/extension-underline": "2.27.1",
+    "@tiptap/pm": "2.27.1",
+    "@tiptap/react": "2.27.1",
+    "@tiptap/starter-kit": "2.27.1",
+    "@tiptap/suggestion": "2.27.1",
+    "class-variance-authority": "0.7.1",
+    "cmdk": "1.1.1",
+    "cnfast": "^0.2.0",
+    "compressorjs": "1.3.0",
+    "consola": "^3.4.2",
+    "culori": "4.0.2",
+    "fuse.js": "7.1.0",
+    "himalaya": "1.1.1",
+    "i18next": "25.5.2",
+    "jotai": "2.14.0",
+    "lodash-es": "4.18.1",
+    "lucide-react": "0.562.0",
+    "motion": "12.38.0",
+    "nanoid": "5.1.11",
+    "penpal": "^7.0.6",
+    "postcss": "8.5.14",
+    "react-arborist": "3.16.0",
+    "react-autosuggest": "10.1.0",
+    "react-colorful": "5.6.1",
+    "react-diff-view": "3.3.3",
+    "react-dropzone": "14.4.1",
+    "react-error-boundary": "6.1.1",
+    "react-filerobot-image-editor": "4.9.1",
+    "react-hotkeys-hook": "5.2.1",
+    "react-i18next": "16.0.0",
+    "sonner": "2.0.7",
+    "streamdown": "2.5.0",
+    "xss": "1.0.15",
+    "zod": "4.3.5"
+  },
+  "devDependencies": {
+    "@ai-sdk/openai-compatible": "2.0.62",
+    "@commitlint/cli": "21.2.2",
+    "@commitlint/config-conventional": "21.2.2",
+    "@faker-js/faker": "10.4.0",
+    "@libsql/client": "0.17.3",
+    "@next/third-parties": "^16.2.10",
+    "@openrouter/ai-sdk-provider": "2.10.0",
+    "@payloadcms/ui": "^3.86.0",
+    "@supabase/supabase-js": "2.105.4",
+    "@tailwindcss/postcss": "^4.3.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "16.3.2",
+    "@types/better-sqlite3": "7.6.13",
+    "@types/lodash-es": "4.17.12",
+    "@types/node": "20.19.27",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "ai": "6.0.180",
+    "better-sqlite3": "12.10.0",
+    "dotenv": "17.4.2",
+    "drizzle-kit": "0.31.10",
+    "drizzle-orm": "0.45.2",
+    "eslint": "10.3.0",
+    "happy-dom": "20.9.0",
+    "husky": "9.1.7",
+    "msw": "2.14.6",
+    "next": "^16.2.10",
+    "payload": "^3.86.0",
+    "postgres": "3.4.9",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.7.4",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "sharp": "0.34.2",
+    "tailwindcss": "^4.3.0",
+    "tsup": "8.5.1",
+    "typedoc": "0.28.19",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.59.3",
+    "vitest": "4.1.6",
+    "workers-ai-provider": "3.3.1"
+  }
+}

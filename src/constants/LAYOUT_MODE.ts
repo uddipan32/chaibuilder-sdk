@@ -1,0 +1,1 @@
+export type LayoutVariant = "SINGLE_SIDE_PANEL" | "DUAL_SIDE_PANEL" | "DUAL_SIDE_PANEL_ADVANCED";

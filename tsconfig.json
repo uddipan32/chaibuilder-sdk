@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "types": ["node", "vitest/importMeta", "vitest/globals"],
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "~/*": ["./src/*"],
+      "chaicore/db/schema-sqlite": ["./src/drizzle/schema.sqlite.ts"],
+      "chaicore/db/relations-sqlite": ["./src/drizzle/relations.sqlite.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "**/*.mts"],
+  "exclude": ["node_modules"]
+}

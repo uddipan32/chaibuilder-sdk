@@ -1,0 +1,18 @@
+echo "Running ESLint before push..."
+
+# Run full lint check
+npm run lint
+
+# Check exit code
+if [ $? -ne 0 ]; then
+    echo "ESLint found errors. Push aborted."
+    echo "Fix the errors or use 'git push --no-verify' to bypass this hook."
+    exit 1
+fi
+
+echo "ESLint passed."
+
+# Unit and integration tests deliberately do not run here: CI (.github/workflows/pr-checks.yml)
+# runs them on every push and PR
+# the prefix back into this repo. Keeping this hook lint-only keeps pushes fast.
+exit 0

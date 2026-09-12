@@ -1,0 +1,16 @@
+packages:
+  - "*"
+
+# Peers (payload/@payloadcms/*, db drivers) are host-provided and resolve from the
+# parent app's node_modules. Never nest them here — a nested payload copy diverges
+# from the app's version and breaks the lexical type checker + slows the DTS build.
+autoInstallPeers: false
+
+allowBuilds:
+  better-sqlite3: true
+  esbuild: true
+  msw: true
+  sharp: true
+
+minimumReleaseAgeExclude:
+  - cnfast@0.2.0

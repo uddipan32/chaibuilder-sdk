@@ -1,0 +1,108 @@
+import { describe, expect, it } from "vitest";
+import { expandGrantMap, hasPermission, intersectPermissions } from "./permissions";
+
+describe("hasPermission", () => {
+  it("returns true when no required permission", () => {
+    expect(hasPermission(null, "")).toBe(true);
+  });
+
+  it("returns false when granted is empty", () => {
+    expect(hasPermission([], "pages:read")).toBe(false);
+    expect(hasPermission(null, "pages:read")).toBe(false);
+  });
+
+  it("matches exact permission", () => {
+    expect(hasPermission(["pages:read", "pages:create"], "pages:read")).toBe(true);
+  });
+
+  it("returns false when exact permission missing", () => {
+    expect(hasPermission(["pages:create"], "pages:read")).toBe(false);
+  });
+
+  it("matches wildcard-all *", () => {
+    expect(hasPermission(["*"], "pages:read")).toBe(true);
+    expect(hasPermission(["*"], "users:remove")).toBe(true);
+  });
+
+  it("matches entity wildcard pages:*", () => {
+    expect(hasPermission(["pages:*"], "pages:read")).toBe(true);
+    expect(hasPermission(["pages:*"], "pages:delete")).toBe(true);
+    expect(hasPermission(["pages:*"], "assets:read")).toBe(false);
+  });
+});
+
+describe("expandGrantMap", () => {
+  it("returns empty array for null/undefined", () => {
+    expect(expandGrantMap(null)).toEqual([]);
+    expect(expandGrantMap(undefined)).toEqual([]);
+  });
+
+  it("expands * to full catalog", () => {
+    const result = expandGrantMap({ "*": true }, ["pages:read", "pages:create", "assets:read"]);
+    expect(result).toEqual(expect.arrayContaining(["pages:read", "pages:create", "assets:read"]));
+  });
+
+  it("expands entity:* to entity ops only", () => {
+    const result = expandGrantMap({ "pages:*": true }, ["pages:read", "pages:create", "assets:read"]);
+    expect(result).toContain("pages:read");
+    expect(result).toContain("pages:create");
+    expect(result).not.toContain("assets:read");
+  });
+
+  it("grants explicit keys", () => {
+    const result = expandGrantMap({ "pages:read": true, "assets:read": true }, [
+      "pages:read",
+      "pages:create",
+      "assets:read",
+    ]);
+    expect(result).toEqual(expect.arrayContaining(["pages:read", "assets:read"]));
+    expect(result).not.toContain("pages:create");
+  });
+
+  it("revoke false wins over wildcard grant", () => {
+    const result = expandGrantMap({ "*": true, "pages:delete": false }, [
+      "pages:read",
+      "pages:delete",
+      "assets:read",
+    ]);
+    expect(result).toContain("pages:read");
+    expect(result).not.toContain("pages:delete");
+  });
+
+  it("revokes entity:* after wildcard-all grant", () => {
+    const result = expandGrantMap({ "*": true, "pages:*": false }, [
+      "pages:read",
+      "pages:create",
+      "assets:read",
+    ]);
+    expect(result).not.toContain("pages:read");
+    expect(result).not.toContain("pages:create");
+    expect(result).toContain("assets:read");
+  });
+});
+
+describe("intersectPermissions", () => {
+  const catalog = ["pages:read", "pages:create", "pages:delete", "assets:read"];
+
+  it("returns intersection of two concrete lists", () => {
+    expect(intersectPermissions(["pages:read", "pages:create"], ["pages:read", "assets:read"], catalog)).toEqual([
+      "pages:read",
+    ]);
+  });
+
+  it("expands wildcards before intersecting", () => {
+    const result = intersectPermissions(["pages:*"], ["pages:read", "assets:read"], catalog);
+    expect(result).toContain("pages:read");
+    expect(result).not.toContain("assets:read");
+    expect(result).not.toContain("pages:create");
+  });
+
+  it("returns empty when no overlap", () => {
+    expect(intersectPermissions(["pages:create"], ["assets:read"], catalog)).toEqual([]);
+  });
+
+  it("returns full catalog when both sides are *", () => {
+    const result = intersectPermissions(["*"], ["*"], catalog);
+    expect(result).toEqual(expect.arrayContaining(catalog));
+  });
+});

@@ -1,0 +1,76 @@
+echo "Running ESLint..."
+
+if [ -f .env.test ]; then
+    export $(grep -v '^#' .env.test | xargs)
+    export NODE_ENV=test
+fi
+
+# Get list of staged JS/TS/TSX files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|jsx|ts|tsx)$' || true)
+
+if [ -z "$STAGED_FILES" ]; then
+    echo "No JS/TS files staged for commit. Skipping ESLint."
+else
+    echo "Linting staged files:"
+    echo "$STAGED_FILES"
+
+    # Run ESLint on staged files
+    npx eslint $STAGED_FILES
+
+    # Check exit code
+    if [ $? -ne 0 ]; then
+        echo "ESLint found errors. Commit aborted."
+        echo "Fix the errors or use 'git commit --no-verify' to bypass this hook."
+        exit 1
+    fi
+
+    echo "ESLint passed."
+fi
+
+# Run unit tests for staged files
+if [ -n "$STAGED_FILES" ]; then
+    echo "Running unit tests for staged files..."
+    
+    # Find corresponding test files for staged source files
+    TEST_FILES=""
+    for file in $STAGED_FILES; do
+        if [[ "$file" == *".test."* ]] || [[ "$file" == *".spec."* ]]; then
+            # Add staged test file, but skip integration tests which need different config
+            if [[ "$file" != *".integration.test."* ]]; then
+                TEST_FILES="$TEST_FILES $file"
+            fi
+        else
+            # Look for test files in common patterns
+            test_file=$(echo "$file" | sed -E 's/\.(js|jsx|ts|tsx)$/.test.\1/')
+            if [ -f "$test_file" ]; then
+                TEST_FILES="$TEST_FILES $test_file"
+            fi
+            
+            # Also check for .spec.js/ts files
+            spec_file=$(echo "$file" | sed -E 's/\.(js|jsx|ts|tsx)$/.spec.\1/')
+            if [ -f "$spec_file" ]; then
+                TEST_FILES="$TEST_FILES $spec_file"
+            fi
+        fi
+    done
+    
+    if [ -n "$TEST_FILES" ]; then
+        echo "Running tests for: $TEST_FILES"
+        npx vitest run $TEST_FILES --passWithNoTests
+        
+        if [ $? -ne 0 ]; then
+            echo "Unit tests failed. Commit aborted."
+            echo "Fix the failing tests or use 'git commit --no-verify' to bypass this hook."
+            exit 1
+        fi
+    else
+        echo "No test files found for staged changes. Skipping tests."
+    fi
+    
+    echo "Unit tests passed."
+else
+    echo "No JS/TS files staged. Skipping unit tests."
+fi
+
+echo "All checks passed. Proceeding with commit."
+exit 0

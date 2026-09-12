@@ -1,0 +1,37 @@
+import { useQuery } from "@tanstack/react-query";
+import { AIContext } from "~/types";
+import { ACTIONS } from "../../constants/ACTIONS";
+import { useCurrentActivePage as useActivePage } from "../pages/use-current-page";
+import { useBuilderFetch } from "../utils/use-fetch";
+
+export const AI_CONTEXT_QUERY_KEY = "AI_CONTEXT";
+
+export function useAiContext() {
+  const { data: activePage } = useActivePage();
+  const builderFetch = useBuilderFetch();
+
+  return useQuery<AIContext | null>({
+    queryKey: [AI_CONTEXT_QUERY_KEY, activePage?.id],
+    queryFn: async () => {
+      if (!activePage?.id) return null;
+      const result = await builderFetch({
+        body: {
+          action: ACTIONS.AI_GET_CONTEXT,
+          data: { pageId: activePage.id },
+        },
+      });
+
+      if (result?.success && result.aiData) {
+        const { app, page } = result.aiData;
+        return {
+          site: app,
+          page: page,
+        };
+      }
+      return null;
+    },
+    enabled: !!activePage?.id,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  });
+}

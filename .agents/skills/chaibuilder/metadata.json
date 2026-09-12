@@ -1,0 +1,12 @@
+{
+  "version": "0.4.0",
+  "organization": "ChaiBuilder",
+  "date": "June 2026",
+  "abstract": "Extension patterns and API reference for ChaiBuilder Core — a website builder package for Next.js. Covers extending the builder UI (sidebar panels, slots, lifecycle hooks, feature flags, custom tabs, block libraries), registering custom blocks, configuring the server, and rendering pages. Designed for AI agents generating code that integrates with or extends a ChaiBuilder Core installation.",
+  "sections": [
+    { "id": "extend-ui", "title": "Extend Builder UI", "status": "complete" },
+    { "id": "blocks", "title": "Custom Blocks", "status": "complete" },
+    { "id": "server", "title": "Server Setup", "status": "complete" },
+    { "id": "render", "title": "Page Rendering", "status": "complete" }
+  ]
+}
