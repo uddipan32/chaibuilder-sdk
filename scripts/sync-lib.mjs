@@ -101,22 +101,31 @@ export function isExcluded(manifest, relPath) {
   return manifest.files.includes(relPath);
 }
 
-/** Every non-excluded file under `<root>/src`, keyed by its src-relative POSIX path. */
+/**
+ * Every non-excluded file under `<root>/src`, keyed by its src-relative POSIX path.
+ *
+ * Listed through git so gitignored artifacts (generated migrations, build output, local
+ * scratch files) never count as part of the tree: tracked files plus untracked files that
+ * are not ignored, minus anything deleted from the working tree.
+ */
 export function listSharedFiles(root, manifest) {
   const srcDir = path.join(root, "src");
   if (!fs.existsSync(srcDir)) fail(`${srcDir} does not exist`);
+  const listed = execFileSync("git", ["ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", "src"], {
+    cwd: root,
+    encoding: "utf8",
+    maxBuffer: 64 * 1024 * 1024,
+  });
   const out = new Map();
-  const walk = (abs, rel) => {
-    for (const entry of fs.readdirSync(abs, { withFileTypes: true })) {
-      if (JUNK.has(entry.name)) continue;
-      const childRel = rel ? `${rel}/${entry.name}` : entry.name;
-      if (isExcluded(manifest, childRel)) continue;
-      const childAbs = path.join(abs, entry.name);
-      if (entry.isDirectory()) walk(childAbs, childRel);
-      else if (entry.isFile()) out.set(childRel, childAbs);
-    }
-  };
-  walk(srcDir, "");
+  for (const file of listed.split("\0")) {
+    if (!file) continue;
+    const rel = file.slice("src/".length);
+    if (rel.split("/").some((part) => JUNK.has(part))) continue;
+    if (isExcluded(manifest, rel)) continue;
+    const abs = path.join(root, file);
+    if (!fs.existsSync(abs) || !fs.statSync(abs).isFile()) continue;
+    out.set(rel, abs);
+  }
   return out;
 }
 
