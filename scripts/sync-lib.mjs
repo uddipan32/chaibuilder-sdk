@@ -49,7 +49,13 @@ export function fail(message) {
 }
 
 export function git(cwd, ...args) {
-  return execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
+  // History reads (the commit list since the last sync) outgrow the 1 MB default after a long gap.
+  return execFileSync("git", args, {
+    cwd,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    maxBuffer: 64 * 1024 * 1024,
+  }).trim();
 }
 
 export function tryGit(cwd, ...args) {
@@ -101,22 +107,32 @@ export function isExcluded(manifest, relPath) {
   return manifest.files.includes(relPath);
 }
 
-/** Every non-excluded file under `<root>/src`, keyed by its src-relative POSIX path. */
+/**
+ * Every non-excluded file under `<root>/src`, keyed by its src-relative POSIX path.
+ *
+ * Listed through git so gitignored artifacts (generated migrations, build output, local
+ * scratch files) never count as part of the tree: tracked files plus untracked files that
+ * are not ignored, minus anything deleted from the working tree.
+ */
 export function listSharedFiles(root, manifest) {
   const srcDir = path.join(root, "src");
   if (!fs.existsSync(srcDir)) fail(`${srcDir} does not exist`);
+  const listed = execFileSync("git", ["ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", "src"], {
+    cwd: root,
+    encoding: "utf8",
+    maxBuffer: 64 * 1024 * 1024,
+  });
   const out = new Map();
-  const walk = (abs, rel) => {
-    for (const entry of fs.readdirSync(abs, { withFileTypes: true })) {
-      if (JUNK.has(entry.name)) continue;
-      const childRel = rel ? `${rel}/${entry.name}` : entry.name;
-      if (isExcluded(manifest, childRel)) continue;
-      const childAbs = path.join(abs, entry.name);
-      if (entry.isDirectory()) walk(childAbs, childRel);
-      else if (entry.isFile()) out.set(childRel, childAbs);
-    }
-  };
-  walk(srcDir, "");
+  for (const file of listed.split("\0")) {
+    if (!file) continue;
+    const rel = file.slice("src/".length);
+    if (rel.split("/").some((part) => JUNK.has(part))) continue;
+    if (isExcluded(manifest, rel)) continue;
+    const abs = path.join(root, file);
+    // lstat, not stat: a symlink under src/ is not shared content and must never be followed.
+    if (!fs.existsSync(abs) || !fs.lstatSync(abs).isFile()) continue;
+    out.set(rel, abs);
+  }
   return out;
 }
 
@@ -152,6 +168,28 @@ export function diffSharedTrees(sourceRoot, targetRoot, manifest) {
   update.sort();
   del.sort();
   return { add, update, delete: del, identical, source, target };
+}
+
+/**
+ * What a sync must copy outside `src/`: the ALSO_IDENTICAL root files whose bytes differ from
+ * the source (or are missing here). `src-sync.exclude` is never copied — the two repos must
+ * already agree on it before a sync runs (`assertSameManifest`), so it cannot be a sync's job.
+ * `sourceMissing` names files this repo has and the source does not; those are left alone.
+ */
+export function diffRootFiles(sourceRoot, targetRoot) {
+  const copy = [];
+  const sourceMissing = [];
+  for (const rel of ALSO_IDENTICAL) {
+    if (rel === MANIFEST_FILE) continue;
+    const source = path.join(sourceRoot, rel);
+    const target = path.join(targetRoot, rel);
+    if (!fs.existsSync(source)) {
+      if (fs.existsSync(target)) sourceMissing.push(rel);
+      continue;
+    }
+    if (!fs.existsSync(target) || !sameBytes(source, target)) copy.push(rel);
+  }
+  return { copy, sourceMissing };
 }
 
 /** Root files from ALSO_IDENTICAL whose bytes differ (or exist in only one repo). */
