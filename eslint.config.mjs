@@ -44,11 +44,14 @@ const eslintConfig = defineConfig([
     },
   },
   {
-    // Plugin boundary: core (everything outside src/plugins) must never import a
-    // plugin. Dependencies point one way — plugins consume core's public surfaces,
-    // never the reverse — so a violation here means a feature has leaked into core.
+    // Plugin boundary: shared core code (everything outside src/plugins, src/payload and
+    // src/edition) must never import a plugin. Dependencies point one way — plugins consume
+    // core's public surfaces, never the reverse — so a violation here means a feature has
+    // leaked into core. The two editions (chaicore, chaipro) keep src/ identical except the
+    // paths in src-sync.exclude (see SYNC.md); src/edition is the one place that may wire
+    // edition-specific plugins in.
     files: ["src/**/*.{ts,tsx,js,jsx,mjs}"],
-    ignores: ["src/plugins/**"],
+    ignores: ["src/plugins/**", "src/payload/**", "src/edition/**"],
     rules: {
       "no-restricted-imports": [
         "error",
@@ -57,7 +60,11 @@ const eslintConfig = defineConfig([
             {
               group: ["~/plugins", "~/plugins/*", "**/src/plugins/**"],
               message:
-                "Core code must not import plugins. Invert via ~/server/plugin-api or builder register-apis.",
+                "Core code must not import plugins. Invert via ~/server/plugin-api or builder register-apis, or wire it in src/edition.",
+            },
+            {
+              group: ["~/payload", "~/payload/*", "**/src/payload/**"],
+              message: "Core code must not import the Payload integration (pro-only zone).",
             },
           ],
         },
@@ -87,7 +94,7 @@ const eslintConfig = defineConfig([
               // pattern would silently never match.
               group: ["@/*", "@/**", "~~/*", "~~/**", "[#]/**"],
               message:
-                "Host-app alias import. The chaicore subtree must build standalone — use ~/ (this repo's src) or a package dependency.",
+                "Host-app alias import. This subtree must build standalone — use ~/ (this repo's src) or a package dependency.",
             },
             {
               // Deepest legitimate import in src/ today is four levels; five would leave the

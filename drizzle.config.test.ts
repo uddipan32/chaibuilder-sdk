@@ -10,7 +10,8 @@ if (!url) {
 }
 
 export default defineConfig({
-  schema: "./src/drizzle/schema.sqlite.ts",
+  // Edition-specific schema barrel (core tables only in chaicore, the full union in chaipro).
+  schema: "./src/edition/test-schema.ts",
   out: "./src/drizzle/migrations-sqlite",
   dialect: "sqlite",
   dbCredentials: { url },
