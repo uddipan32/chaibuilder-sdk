@@ -64,6 +64,16 @@ run while the two manifests differ.
 while anything unrelated is staged: the commit it writes records the whole index, and it may
 carry only what it synced.
 
+## Online: the "Sync from pro" workflow
+
+chaibuilder/core has a `Sync from pro` GitHub Actions workflow (`.github/workflows/sync-from-pro.yml`)
+that runs the same script on a runner and opens a `sync/pro-<sha>` pull request with the
+preview in its body — no local checkouts needed. Start it from the Actions tab (input: the pro
+ref, default `dev`) or let the weekly schedule run it. It needs two repository secrets: a
+read-only token for the private pro repo and a token that may push and open pull requests
+(the default `GITHUB_TOKEN` cannot read pro, and pull requests it opens do not trigger CI).
+Merge that pull request like any other sync: merge commit or rebase, never squash.
+
 ## What a sync commit records
 
 `sync:src` writes the commit itself (with `--no-verify`, since the content was validated at the
