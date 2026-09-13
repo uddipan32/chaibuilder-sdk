@@ -112,12 +112,12 @@ export const PathDropdown = ({ data, onSelect, dataType, repeaterKey }: PathDrop
           e.preventDefault();
           e.currentTarget.scrollTop += e.deltaY;
         }}>
-        <CommandEmpty className="flex h-24 items-center justify-center text-xs text-muted">
+        <CommandEmpty className="text-muted flex h-24 items-center justify-center text-xs">
           {t("No option found.")}
         </CommandEmpty>
         <CommandGroup>
           {currentPath.length > 0 && (
-            <CommandItem onSelect={handleBack} className="flex items-center gap-2 text-xs text-muted">
+            <CommandItem onSelect={handleBack} className="text-muted flex items-center gap-2 text-xs">
               <ChevronLeftIcon className="!h-3 !w-3" />
               {t("Back")}
             </CommandItem>
@@ -139,7 +139,7 @@ export const PathDropdown = ({ data, onSelect, dataType, repeaterKey }: PathDrop
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-6 px-2 hover:bg-primary hover:text-primary-foreground"
+                        className="hover:bg-primary hover:text-primary-foreground h-6 px-2"
                         onClick={(e) => {
                           e.stopPropagation();
                           onSelect([...currentPath, option.key].join("."), dataType);

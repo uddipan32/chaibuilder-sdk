@@ -1,7 +1,12 @@
 import { AsyncLocalStorage } from "async_hooks";
 import { cache } from "react";
 import { getChaiContextResolver, staticDefaultChaiContext } from "~/server/chai-context-resolver";
-import type { ChaiBuilderRouteProps, ChaiContextResolverArgs, ChaiIncomingRequest, ChaiRequestContext } from "~/types/chaibuilder-config";
+import type {
+  ChaiBuilderRouteProps,
+  ChaiContextResolverArgs,
+  ChaiIncomingRequest,
+  ChaiRequestContext,
+} from "~/types/chaibuilder-config";
 
 type SharedRequestContextState = {
   context: ChaiRequestContext | null;
@@ -54,11 +59,11 @@ export async function resolveChaiContextViaResolver(args: ChaiContextResolverArg
   const resolver = getChaiContextResolver();
   const base = staticDefaultChaiContext();
   if (!resolver) {
-    return withRequestSiteUrl(base, args.request);
+    return withRequestContext(base, args.request);
   }
   const resolved = await resolver(args);
   return withNormalizedDelegation(
-    withRequestSiteUrl(
+    withRequestContext(
       {
         ...base,
         ...resolved,
@@ -87,15 +92,18 @@ function firstHeaderValue(value: string | null): string | null {
 }
 
 /**
- * Fills the `siteUrl` fallback (absolute origin) from the `Host` header (or the
- * request URL host) when neither the resolver nor `SITE_URL` supplied one. Stored
- * as a full `https://host` URL so downstream `new URL(siteUrl)` never throws.
- * SITE_URL / resolver values always win, so a correctly-configured production app
- * never relies on this. `X-Forwarded-Host` is deliberately NOT used: it is
- * client-settable and would let a request spoof the site origin (e.g. to
- * `localhost`).
+ * Enriches the resolved context from the incoming request:
+ * - `siteUrl` fallback (absolute origin) from the `Host` header (or the request
+ *   URL host) when neither the resolver nor `SITE_URL` supplied one. Stored as a
+ *   full `https://host` URL so downstream `new URL(siteUrl)` never throws.
+ *   SITE_URL / resolver values always win, so a correctly-configured production
+ *   app never relies on this. `X-Forwarded-Host` is deliberately NOT used: it is
+ *   client-settable and would let a request spoof the site origin (e.g. to
+ *   `localhost`).
+ * - `requestHeaders`, a read-only accessor plugins reach through
+ *   `getChaiRequestHeader()` (client hints such as refresh throttles).
  */
-function withRequestSiteUrl(context: ChaiRequestContext, request?: ChaiIncomingRequest): ChaiRequestContext {
+function withRequestContext(context: ChaiRequestContext, request?: ChaiIncomingRequest): ChaiRequestContext {
   if (!request) return context;
 
   let siteUrl = context.siteUrl;
@@ -104,7 +112,11 @@ function withRequestSiteUrl(context: ChaiRequestContext, request?: ChaiIncomingR
     if (host) siteUrl = `https://${host}`;
   }
 
-  return { ...context, siteUrl };
+  return {
+    ...context,
+    siteUrl,
+    requestHeaders: request.headers,
+  };
 }
 
 function hostFromUrl(url: string): string | null {

@@ -1,7 +1,8 @@
 import "~/server/only-server";
 // Side effect: registers the Next.js framework adapter (persistent cache + revalidation).
-// NOTE: a host that only ever uses `import type` from this entry never evaluates this
-// module, and must import `chaicore/nextjs/register-adapter` itself.
+// NOTE: a host that only ever uses `import type` from this entry never evaluates this module, so
+// it needs a value import of the entry (`import "<pkg>/nextjs/server";`) to get a real adapter —
+// unless an edition entry point it already uses imports the adapter for it, lazily.
 import "~/nextjs/register-adapter";
 
 export type {
@@ -51,6 +52,7 @@ export { buildChaiBuilderConfig, getChaiBuilderConfigOnInit } from "~/server/bui
 export type { BuildChaiBuilderConfigOptions } from "~/server/build-config";
 export {
   defineChaiServerPlugin,
+  getChaiRequestHeader,
   registerChaiActionHook,
   registerChaiRequestMiddleware,
   runChaiActionHooks,
@@ -80,10 +82,7 @@ export { getChaiBuilder } from "~/server/get-chaibuilder";
 export { handleChaiActionRequest } from "~/nextjs/handle-action-request";
 // Multipart transport for file-carrying actions; the route picks the parser and
 // hands the result to the same `handleHttpAction`.
-export {
-  isMultipartActionRequest,
-  parseMultipartActionBody,
-} from "~/server/chai-builder/parse-multipart-action";
+export { isMultipartActionRequest, parseMultipartActionBody } from "~/server/chai-builder/parse-multipart-action";
 export type { HttpChaiActionBody } from "~/server/chai-builder/handle-http-action";
 
 export * from "~/server/chai-actions/db";
@@ -116,7 +115,7 @@ export { ChaiBaseAction } from "~/server/chai-actions/base-action";
 // dialect factory from this entry would statically pull its driver (e.g. `better-sqlite3`)
 // into every consumer bundle, breaking projects on a different dialect that never
 // installed that optional peer. Import per-dialect subpaths instead:
-//   chaicore/db/libsql | chaicore/db/d1 | chaicore/db/better-sqlite3
+//   <pkg>/db/better-sqlite3 | <pkg>/db/libsql | <pkg>/db/d1 (pro adds <pkg>/db/postgres | <pkg>/db/node-pg)
 export {
   CHAI_PERMISSIONS,
   CHAI_PERMISSION_LIST,

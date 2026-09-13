@@ -7,6 +7,14 @@ import {
 } from "~/server/resolve-chai-context";
 
 describe("resolveChaiContextViaResolver", () => {
+  const request = (headers: Record<string, string>) =>
+    ({
+      headers: { get: (name: string) => headers[name.toLowerCase()] ?? null },
+      method: "POST",
+      url: "https://example.com/api",
+      cookies: { get: () => undefined },
+    }) as const;
+
   beforeEach(() => {
     resetSharedChaiRequestContextForTests();
     resetChaiContextResolverForTests();
@@ -15,6 +23,17 @@ describe("resolveChaiContextViaResolver", () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+  });
+
+  it("captures the request headers accessor for plugins only when a request is present", async () => {
+    setChaiContextResolver(async () => ({ userId: "user-1" }));
+
+    const withRequest = await resolveChaiContextViaResolver({ request: request({ "x-hint": "a, b" }) });
+    expect(withRequest.requestHeaders?.get("x-hint")).toBe("a, b");
+    expect(withRequest.siteUrl).toBe("https://example.com");
+
+    const withoutRequest = await resolveChaiContextViaResolver({});
+    expect(withoutRequest.requestHeaders).toBeUndefined();
   });
 
   it("carries host-supplied permissions and role onto the context", async () => {

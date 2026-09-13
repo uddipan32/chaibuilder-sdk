@@ -41,7 +41,6 @@ export async function assertAssetNotExists(db: TestDb, assetId: string): Promise
   }
 }
 
-
 export async function getPageById(db: TestDb, pageId: string) {
   const pages = await db.query.appPages.findMany({
     where: eq(schema.appPages.id, pageId),

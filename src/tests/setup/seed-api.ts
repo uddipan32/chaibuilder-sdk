@@ -1,6 +1,6 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { and, eq } from "drizzle-orm";
-import * as tables from "~/drizzle/schema.sqlite";
+import * as tables from "~/edition/test-schema";
 import { fake } from "./fakers";
 import { type TestDb } from "./test-db";
 

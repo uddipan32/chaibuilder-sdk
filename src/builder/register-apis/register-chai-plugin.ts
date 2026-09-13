@@ -5,6 +5,11 @@
  * one API. Registration is once-per-name: re-invocations (React strict mode,
  * multiple builder mounts) are ignored.
  */
+// Edition-level always-on client plugins are prepended here rather than named by
+// the host. Mirrors the server side, where buildChaiBuilderConfig prepends
+// editionServerPlugins().
+import { editionClientPlugins } from "~/edition/builtin-client-plugins";
+
 export type ChaiClientPlugin = {
   /** Unique plugin id, e.g. `"chai:redirects"`. */
   name: string;
@@ -15,7 +20,7 @@ export type ChaiClientPlugin = {
 const REGISTERED_CLIENT_PLUGINS = new Set<string>();
 
 export const registerChaiClientPlugins = (plugins: ChaiClientPlugin[] = []): void => {
-  for (const plugin of plugins) {
+  for (const plugin of [...editionClientPlugins, ...plugins]) {
     if (REGISTERED_CLIENT_PLUGINS.has(plugin.name)) {
       continue;
     }

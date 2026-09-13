@@ -84,6 +84,7 @@ export {
   type ChaiActionHookArgs,
   type ChaiActionHookName,
 } from "./action-hooks";
+export { getChaiRequestHeader } from "./request-headers";
 export {
   registerChaiRequestMiddleware,
   resetChaiRequestMiddlewareForTests,

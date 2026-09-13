@@ -14,6 +14,8 @@ export type RequestState = {
   lang: string | null;
   initialized: boolean;
   siteUrl: string | null;
+  /** Incoming request headers accessor for plugins; null outside an HTTP request. */
+  requestHeaders: { get(name: string): string | null } | null;
   /** Delegation ceiling for this credential (OAuth/MCP); null on normal browser requests. */
   delegatedPermissions: string[] | null;
   cacheKeys: Map<string, true>;
@@ -36,6 +38,7 @@ const createDefaultState = (): RequestState => ({
   lang: null,
   initialized: false,
   siteUrl: null,
+  requestHeaders: null,
   delegatedPermissions: null,
   cacheKeys: new Map(),
   traceId: null,
@@ -54,6 +57,7 @@ function applyContext(state: RequestState, ctx: ChaiRequestContext): void {
   state.siteUrl = ctx.siteUrl ?? null;
   state.lang = ctx.lang ?? "en";
   state.fallbackLang = "en";
+  state.requestHeaders = ctx.requestHeaders ?? null;
   // `delegatedScopes` is the deprecated name for the same ceiling.
   state.delegatedPermissions = ctx.delegatedPermissions ?? ctx.delegatedScopes ?? null;
   state.initialized = true;

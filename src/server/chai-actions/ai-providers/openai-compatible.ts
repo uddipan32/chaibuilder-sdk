@@ -30,7 +30,7 @@ import {
  * The lazy import is what keeps the package optional — and what hides it from
  * bundlers, so Next's output file tracing leaves it out of a production build
  * even when it is installed. Hosts that ship this provider should register
- * `chaicore/ai/openai-compatible` instead, which imports the SDK statically.
+ * `<pkg>/ai/openai-compatible` instead, which imports the SDK statically.
  */
 export const openAICompatiblePlugin: ChaiAiProviderPlugin = {
   id: OPENAI_COMPATIBLE_PLUGIN_ID,

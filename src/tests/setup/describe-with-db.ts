@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { afterAll, describe } from "vitest";
-import * as tables from "~/drizzle/schema.sqlite";
+import * as tables from "~/edition/test-schema";
 import { createSeeder } from "./seed-api";
 import { getTestDb } from "./test-db";
 

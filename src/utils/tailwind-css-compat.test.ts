@@ -73,10 +73,7 @@ describe("tailwind-css-compat", () => {
       config: { darkMode: "class" },
     });
 
-    expect(compile).toHaveBeenCalledWith(
-      expect.stringMatching(/@import "tailwindcss";/),
-      expect.any(Object),
-    );
+    expect(compile).toHaveBeenCalledWith(expect.stringMatching(/@import "tailwindcss";/), expect.any(Object));
     expect(compile.mock.calls[0]?.[0]).not.toContain(`@import "tailwindcss/theme";`);
   });
 
@@ -155,17 +152,28 @@ describe("tailwind-css-compat", () => {
   });
 
   it("does not reuse a compiler prewarmed for a different config", async () => {
-    const compile = vi.fn(async (_css: string, opts: { loadModule: (id: string, base: string, hint: "config") => Promise<{ module: { darkMode?: string } }> }) => {
-      const { module } = await opts.loadModule("virtual:chai-builder-tailwind-config", "", "config");
-      return { build: () => `css-for-${module.darkMode}` };
-    });
+    const compile = vi.fn(
+      async (
+        _css: string,
+        opts: { loadModule: (id: string, base: string, hint: "config") => Promise<{ module: { darkMode?: string } }> },
+      ) => {
+        const { module } = await opts.loadModule("virtual:chai-builder-tailwind-config", "", "config");
+        return { build: () => `css-for-${module.darkMode}` };
+      },
+    );
 
     vi.doMock("tailwindcss", () => ({ compile }));
     const { compileTailwindCss } = await import("./tailwind-css-compat");
 
-    const first = await compileTailwindCss({ markupStrings: [`<div class="p-1"></div>`], config: { darkMode: "class" } });
+    const first = await compileTailwindCss({
+      markupStrings: [`<div class="p-1"></div>`],
+      config: { darkMode: "class" },
+    });
     await new Promise((resolve) => setTimeout(resolve, 0));
-    const second = await compileTailwindCss({ markupStrings: [`<div class="p-1"></div>`], config: { darkMode: "media" } });
+    const second = await compileTailwindCss({
+      markupStrings: [`<div class="p-1"></div>`],
+      config: { darkMode: "media" },
+    });
 
     expect(first).toBe("css-for-class");
     expect(second).toBe("css-for-media");
@@ -182,7 +190,11 @@ describe("tailwind-css-compat", () => {
     const { compileTailwindCss } = await import("./tailwind-css-compat");
     const plugin = () => {};
 
-    const makeConfig = () => ({ darkMode: "class", theme: { extend: { colors: { brand: "red" } } }, plugins: [plugin] });
+    const makeConfig = () => ({
+      darkMode: "class",
+      theme: { extend: { colors: { brand: "red" } } },
+      plugins: [plugin],
+    });
 
     await compileTailwindCss({ markupStrings: [`<div class="p-1"></div>`], config: makeConfig() });
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -289,5 +301,4 @@ describe("tailwind-css-compat", () => {
       compileTailwindCss({ markupStrings: [`<div class="p-1"></div>`], config: { darkMode: "class" } }),
     ).rejects.toThrow(/requires Tailwind v4/);
   });
-
 });

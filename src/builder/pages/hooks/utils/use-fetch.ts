@@ -7,6 +7,11 @@ import {
   isChaiHttpActionFailure,
   parseChaiHttpActionResponse,
 } from "~/builder/pages/utils/parse-chai-http-action-response";
+import {
+  collectChaiFetchInterceptorHeaders,
+  mergeChaiFetchHeaders,
+  notifyChaiFetchInterceptors,
+} from "~/builder/register-apis/register-chai-fetch-interceptor";
 
 export const useBuilderFetch = () => {
   const fetch = useFetch();
@@ -72,13 +77,16 @@ export const useFetch = () => {
 
       try {
         const action = get(modifiedBody, "action", "").toLowerCase();
+        // Registered client plugins may ride along on the action requests this hook makes (see
+        // registerChaiFetchInterceptor). Caller headers and Authorization always win, whatever
+        // case an interceptor spelled them in.
+        const interceptorContext = { action: modifiedBody.action };
         const response = await fetchAPI(
           url + (action ? `?action=${action}` : ""),
           modifiedBody,
-          {
-            ...headers,
+          mergeChaiFetchHeaders(collectChaiFetchInterceptorHeaders(interceptorContext), headers, {
             Authorization: `Bearer ${authToken}`,
-          },
+          }),
           options,
         );
         if (streamResponse) {
@@ -86,6 +94,9 @@ export const useFetch = () => {
         }
 
         const bodyJson = await response.json();
+
+        // Interceptors see every parsed body (success or failure) before the builder acts on it.
+        notifyChaiFetchInterceptors({ ...interceptorContext, status: response.status, body: bodyJson });
 
         if (response.status === 401 || (isChaiHttpActionFailure(bodyJson) && bodyJson.error.status === 401)) {
           console.log("401 Response", bodyJson);

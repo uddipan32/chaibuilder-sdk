@@ -17,8 +17,7 @@ const CLOSING_P = /<\/p>$/i;
 
 // Elements that a `<p>` may not contain. The browser closes the open paragraph
 // when it meets one, so the wrapper survives as a stray empty `<p>`.
-const BLOCK_LEVEL =
-  /<(?:h[1-6]|p|ul|ol|blockquote|pre|table|div|hr|figure|section|article|address|dl|form)\b/i;
+const BLOCK_LEVEL = /<(?:h[1-6]|p|ul|ol|blockquote|pre|table|div|hr|figure|section|article|address|dl|form)\b/i;
 
 /**
  * A binding that resolves to block-level HTML is often authored wrapped in a

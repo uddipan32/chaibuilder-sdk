@@ -15,9 +15,11 @@
  * Usage: `import '~/server/only-server'` at entry/barrel chokepoints — not in
  * every internal module.
  */
+import { CHAI_PACKAGE_NAME } from "~/edition/identity";
+
 if (typeof window !== "undefined") {
   throw new Error(
-    "chaicore: server-only module imported in client/browser code. " +
+    `${CHAI_PACKAGE_NAME}: server-only module imported in client/browser code. ` +
       "Import this only from server code (server components, route handlers, payload.config.ts).",
   );
 }

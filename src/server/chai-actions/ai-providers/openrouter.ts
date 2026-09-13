@@ -23,7 +23,7 @@ import {
  * The lazy import is what keeps the package optional — and what hides it from
  * bundlers, so Next's output file tracing leaves it out of a production build
  * even when it is installed. Hosts that ship OpenRouter should register
- * `chaicore/ai/openrouter` instead, which imports the SDK statically.
+ * `<pkg>/ai/openrouter` instead, which imports the SDK statically.
  */
 export const openRouterPlugin: ChaiAiProviderPlugin = {
   id: OPENROUTER_PLUGIN_ID,

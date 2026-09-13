@@ -86,6 +86,14 @@ export type ChaiRequestContext = {
   siteUrl?: string | null;
   /** HOW: language for this request. Default `"en"`. Per-action `lang` in the payload still wins. */
   lang?: string;
+  /**
+   * Read-only view of the incoming request headers, captured during context resolution when
+   * the host passes the request to `getChaiBuilder(config, routeProps, request)`. Lets plugins
+   * read client hints through `getChaiRequestHeader()`. Host resolvers never set it; absent
+   * outside HTTP (scripts, MCP tools). Not serialisable — never persist or log the context
+   * wholesale.
+   */
+  requestHeaders?: { get(name: string): string | null } | null;
 };
 
 /**
