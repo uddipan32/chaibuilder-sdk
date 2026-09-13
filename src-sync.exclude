@@ -1,0 +1,26 @@
+# Paths under src/ that differ between chaicore and chaipro BY DESIGN.
+# Everything else under src/ must be byte-identical in both repos.
+#
+# Relative to src/. A leading "/" anchors at src/, a trailing "/" marks a directory.
+# Read by scripts/sync-src.mjs and scripts/sync-check.mjs. Edit in both repos in the same change.
+/edition/
+/payload/
+/plugins/ai-pro/
+/plugins/animation/
+/plugins/bulk-publish/
+/plugins/db/
+/plugins/export-code/
+/plugins/form-submissions/
+/plugins/layout/
+/plugins/library/
+/plugins/licensing/
+/plugins/media/
+/plugins/media-search/
+/plugins/multilingual/
+/plugins/plans/
+/plugins/realtime/
+/plugins/redirects/
+/plugins/revisions/
+/plugins/roles/
+/plugins/tenancy/
+/plugins/trash/
