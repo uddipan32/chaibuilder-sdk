@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { CHAI_CORE_VERSION } from "~/constants/VERSION";
+import { CHAI_VERSION } from "~/constants/VERSION";
 import { logChaiCoreVersionBanner } from "./version-banner";
 
 const BANNER_FLAG = "__chaiCoreVersionBannerPrinted__";
@@ -24,7 +24,7 @@ describe("logChaiCoreVersionBanner", () => {
     expect(logSpy).toHaveBeenCalledTimes(1);
     const [format] = logSpy.mock.calls[0] as [string, ...string[]];
     expect(format).toContain("CHAIBUILDER CORE");
-    expect(format).toContain(CHAI_CORE_VERSION);
+    expect(format).toContain(CHAI_VERSION);
     expect(format).toContain("Not a developer?");
     expect(format).toContain("Never paste code in here.");
   });

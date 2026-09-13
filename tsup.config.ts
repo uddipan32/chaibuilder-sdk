@@ -235,10 +235,10 @@ export default defineConfig({
   },
   define: {
     "import.meta.vitest": "undefined",
-    __CHAI_CORE_VERSION__: JSON.stringify(pkgVersion),
+    __CHAI_VERSION__: JSON.stringify(pkgVersion),
     // Marks the published bundle so dev-only code (e.g. license debug logging) is
     // dead-code-eliminated and never runs in a consumer's app.
-    __CHAI_CORE_BUNDLED__: "true",
+    __CHAI_BUNDLED__: "true",
   },
   tsconfig: resolve(__dirname, "./tsconfig.json"),
   entry: activeEntries,

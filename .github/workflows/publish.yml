@@ -2,7 +2,7 @@ name: Publish
 
 # Runs when release-please publishes a GitHub release. The version in package.json was
 # already bumped and committed by the release pull request, so nothing here edits it —
-# tsup reads package.json at build time and inlines it as __CHAI_CORE_VERSION__.
+# tsup reads package.json at build time and inlines it as __CHAI_VERSION__.
 
 on:
   release:
